@@ -1,9 +1,3 @@
-/*Syntax Analyser (Parser)
-PASC600
-Nikos Plessas 
-AEM : 615*/
-
-
 
 /* BLOCK A: Statements block*/
 %{

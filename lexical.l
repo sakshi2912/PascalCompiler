@@ -1,7 +1,3 @@
-/*Lexical Analyser (Lexer) for Syntax Analyser
-PASC600
-Nikos Plessas 
-AEM : 615*/
 
 /*part Α - statements block/*/
 
