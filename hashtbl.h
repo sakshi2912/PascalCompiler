@@ -26,6 +26,7 @@ struct hashnode_s
 	void *data;
 	int scope;
 	char *value;
+	int line_no;
 	struct hashnode_s *next;
 };
 
@@ -38,7 +39,7 @@ typedef struct hashtbl
 
 HASHTBL *hashtbl_create(hash_size size, hash_size (*hashfunc)(const char *));
 void hashtbl_destroy(HASHTBL *hashtbl);
-int hashtbl_insert(HASHTBL *hashtbl, const char *key, void *data, int scope, char *value);
+int hashtbl_insert(HASHTBL *hashtbl, const char *key, void *data, int scope, char *value, int line_no);
 int hashtbl_remove(HASHTBL *hashtbl, const char *key, int scope);
 void *hashtbl_get(HASHTBL *hashtbl, int scope);
 void *hashtbl_update(HASHTBL *hashtbl, const char *key, char *value);

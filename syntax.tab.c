@@ -80,6 +80,8 @@ HASHTBL *symbol; //Symbol Table declaration (global)
 //#define MAX_LINE_SIZE 256
 
 char filename[64];
+extern int line_no;
+
 extern FILE *yyin;
 int scope; //global variable for scope, initialized to 0
 int datatype; 
@@ -87,7 +89,7 @@ error_no = 0;
 //global variable for error count initialized to 0
 
 
-#line 91 "syntax.tab.c"
+#line 93 "syntax.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -191,7 +193,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 24 "syntax.y"
+#line 26 "syntax.y"
 
   unsigned int integer;
   double real;
@@ -199,7 +201,7 @@ union YYSTYPE
   char character;
   int boolean;
 
-#line 203 "syntax.tab.c"
+#line 205 "syntax.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -579,17 +581,17 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    94,    94,    97,   100,   103,   104,   107,   108,   111,
-     112,   113,   114,   115,   116,   117,   118,   119,   120,   121,
-     122,   125,   126,   129,   130,   133,   134,   135,   136,   137,
-     140,   141,   144,   145,   148,   149,   150,   153,   154,   157,
-     158,   161,   162,   163,   164,   165,   168,   169,   172,   173,
-     174,   175,   176,   177,   181,   182,   185,   186,   189,   190,
-     224,   225,   228,   229,   232,   233,   234,   237,   238,   241,
-     242,   244,   245,   248,   251,   252,   255,   256,   257,   258,
-     259,   260,   261,   262,   266,   281,   282,   283,   286,   286,
-     289,   289,   295,   296,   299,   300,   304,   305,   308,   309,
-     313,   316,   317,   318,   321
+       0,    96,    96,    99,   102,   105,   106,   109,   110,   113,
+     114,   115,   116,   117,   118,   119,   120,   121,   122,   123,
+     124,   127,   128,   131,   132,   135,   136,   137,   138,   139,
+     142,   143,   146,   147,   150,   151,   152,   155,   156,   159,
+     160,   163,   164,   165,   166,   167,   170,   171,   174,   175,
+     176,   177,   178,   179,   183,   184,   187,   188,   191,   192,
+     226,   227,   230,   231,   234,   235,   236,   239,   240,   243,
+     244,   246,   247,   250,   253,   254,   257,   258,   259,   260,
+     261,   262,   263,   264,   268,   283,   284,   285,   288,   288,
+     291,   291,   297,   298,   301,   302,   306,   307,   310,   311,
+     315,   318,   319,   320,   323
 };
 #endif
 
@@ -1528,115 +1530,115 @@ yyreduce:
   switch (yyn)
     {
   case 8:
-#line 108 "syntax.y"
-                             {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"constant");}
-#line 1534 "syntax.tab.c"
+#line 110 "syntax.y"
+                             {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"constant",line_no);}
+#line 1536 "syntax.tab.c"
     break;
 
   case 16:
-#line 118 "syntax.y"
+#line 120 "syntax.y"
                {(yyval.string) = (yyvsp[0].string);}
-#line 1540 "syntax.tab.c"
+#line 1542 "syntax.tab.c"
     break;
 
   case 19:
-#line 121 "syntax.y"
+#line 123 "syntax.y"
                { (yyval.string) =(yyvsp[0].integer);}
-#line 1546 "syntax.tab.c"
+#line 1548 "syntax.tab.c"
     break;
 
   case 21:
-#line 125 "syntax.y"
+#line 127 "syntax.y"
                { (yyval.string) = (yyvsp[0].string);}
-#line 1552 "syntax.tab.c"
+#line 1554 "syntax.tab.c"
     break;
 
   case 25:
-#line 133 "syntax.y"
+#line 135 "syntax.y"
                    {(yyval.integer) =(yyvsp[0].integer); datatype=0;}
-#line 1558 "syntax.tab.c"
+#line 1560 "syntax.tab.c"
     break;
 
   case 26:
-#line 134 "syntax.y"
+#line 136 "syntax.y"
                {(yyval.integer) =(yyvsp[0].real); datatype =1;}
-#line 1564 "syntax.tab.c"
+#line 1566 "syntax.tab.c"
     break;
 
   case 27:
-#line 135 "syntax.y"
+#line 137 "syntax.y"
                {(yyval.integer) =(yyvsp[0].boolean); datatype=2;}
-#line 1570 "syntax.tab.c"
+#line 1572 "syntax.tab.c"
     break;
 
   case 28:
-#line 136 "syntax.y"
+#line 138 "syntax.y"
                {(yyval.integer) =(yyvsp[0].character); datatype=3;}
-#line 1576 "syntax.tab.c"
+#line 1578 "syntax.tab.c"
     break;
 
   case 29:
-#line 137 "syntax.y"
+#line 139 "syntax.y"
                {(yyval.integer) =(yyvsp[0].string);datatype=4;}
-#line 1582 "syntax.tab.c"
+#line 1584 "syntax.tab.c"
     break;
 
   case 48:
-#line 172 "syntax.y"
+#line 174 "syntax.y"
                     { (yyval.string) = (yyvsp[0].string); datatype=0;}
-#line 1588 "syntax.tab.c"
+#line 1590 "syntax.tab.c"
     break;
 
   case 49:
-#line 173 "syntax.y"
+#line 175 "syntax.y"
              { (yyval.string) = (yyvsp[0].string);  datatype=1;}
-#line 1594 "syntax.tab.c"
+#line 1596 "syntax.tab.c"
     break;
 
   case 50:
-#line 174 "syntax.y"
+#line 176 "syntax.y"
                 { (yyval.string) = (yyvsp[0].string);  datatype=2;}
-#line 1600 "syntax.tab.c"
+#line 1602 "syntax.tab.c"
     break;
 
   case 51:
-#line 175 "syntax.y"
+#line 177 "syntax.y"
              { (yyval.string) = (yyvsp[0].string);  datatype=3;}
-#line 1606 "syntax.tab.c"
+#line 1608 "syntax.tab.c"
     break;
 
   case 52:
-#line 176 "syntax.y"
+#line 178 "syntax.y"
                { (yyval.string) = (yyvsp[0].string);  datatype=4;}
-#line 1612 "syntax.tab.c"
+#line 1614 "syntax.tab.c"
     break;
 
   case 53:
-#line 177 "syntax.y"
+#line 179 "syntax.y"
            {(yyval.string) = (yyvsp[0].string);}
-#line 1618 "syntax.tab.c"
+#line 1620 "syntax.tab.c"
     break;
 
   case 56:
-#line 185 "syntax.y"
-                                                                 {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"NULL");}
-#line 1624 "syntax.tab.c"
+#line 187 "syntax.y"
+                                                                 {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"NULL",line_no);}
+#line 1626 "syntax.tab.c"
     break;
 
   case 57:
-#line 186 "syntax.y"
-                                   {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"NULL");}
-#line 1630 "syntax.tab.c"
+#line 188 "syntax.y"
+                                   {hashtbl_insert(symbol,(yyvsp[-2].string),(yyvsp[0].string),scope,"NULL",line_no);}
+#line 1632 "syntax.tab.c"
     break;
 
   case 58:
-#line 189 "syntax.y"
+#line 191 "syntax.y"
                   { (yyval.string) = (yyvsp[0].string); }
-#line 1636 "syntax.tab.c"
+#line 1638 "syntax.tab.c"
     break;
 
   case 59:
-#line 191 "syntax.y"
+#line 193 "syntax.y"
                             { 
                             
                             //$$=$1; 
@@ -1644,35 +1646,35 @@ yyreduce:
                             if(datatype==0)
                             {
                                 strcpy(res,"integer");
-                                hashtbl_insert(symbol,(yyvsp[0].string),"integer",scope,"NULL");
+                                hashtbl_insert(symbol,(yyvsp[0].string),"integer",scope,"NULL",line_no);
 
                             }
                             else if(datatype==1)
                             {
                                 strcpy(res,"real");
-                                hashtbl_insert(symbol,(yyvsp[0].string),"real",scope,"NULL");
+                                hashtbl_insert(symbol,(yyvsp[0].string),"real",scope,"NULL",line_no);
                             }
                             else if(datatype==2)
                             {
                                 strcpy(res,"boolean");
-                                hashtbl_insert(symbol,(yyvsp[0].string),"boolean",scope,"NULL");
+                                hashtbl_insert(symbol,(yyvsp[0].string),"boolean",scope,"NULL",line_no);
                             }
                             else if(datatype==3)
                             {
                                 strcpy(res,"character");
-                                hashtbl_insert(symbol,(yyvsp[0].string),"character",scope,"NULL");
+                                hashtbl_insert(symbol,(yyvsp[0].string),"character",scope,"NULL",line_no);
                             }
                             else if(datatype==4)
                             {
                                 strcpy(res,"string");
-                                hashtbl_insert(symbol,(yyvsp[0].string),"strifn",scope,"NULL");
+                                hashtbl_insert(symbol,(yyvsp[0].string),"strifn",scope,"NULL",line_no);
                             }
                             }
-#line 1672 "syntax.tab.c"
+#line 1674 "syntax.tab.c"
     break;
 
   case 84:
-#line 266 "syntax.y"
+#line 268 "syntax.y"
                                          {
                                             printf("New values : %s, %d\n", (yyvsp[-2].string),(yyvsp[0].string)); 
                                             char result[4]; 
@@ -1680,50 +1682,50 @@ yyreduce:
                                            
                                             sprintf(result, "%d", num); 
                                             hashtbl_update(symbol,(yyvsp[-2].string),result);}
-#line 1684 "syntax.tab.c"
+#line 1686 "syntax.tab.c"
     break;
 
   case 87:
-#line 283 "syntax.y"
+#line 285 "syntax.y"
             {yyerrok;yyclearin;printf("Error at IF--ignoring. Total errors: %d\n",error_no);}
-#line 1690 "syntax.tab.c"
+#line 1692 "syntax.tab.c"
     break;
 
   case 88:
-#line 286 "syntax.y"
+#line 288 "syntax.y"
                                      {scope++;}
-#line 1696 "syntax.tab.c"
+#line 1698 "syntax.tab.c"
     break;
 
   case 89:
-#line 286 "syntax.y"
+#line 288 "syntax.y"
                                                                {hashtbl_get(symbol,scope);scope--;}
-#line 1702 "syntax.tab.c"
+#line 1704 "syntax.tab.c"
     break;
 
   case 90:
-#line 289 "syntax.y"
+#line 291 "syntax.y"
                                                {scope++;}
-#line 1708 "syntax.tab.c"
+#line 1710 "syntax.tab.c"
     break;
 
   case 91:
-#line 289 "syntax.y"
-                                                                         {hashtbl_insert(symbol,(yyvsp[-5].string),"integer",scope,"NULL"); 
+#line 291 "syntax.y"
+                                                                         {hashtbl_insert(symbol,(yyvsp[-5].string),"integer",scope,"NULL",line_no); 
                                                                                     //hashtbl_get(symbol,scope);
                                                                                     scope--; 
 }
-#line 1717 "syntax.tab.c"
+#line 1719 "syntax.tab.c"
     break;
 
   case 92:
-#line 295 "syntax.y"
+#line 297 "syntax.y"
                                        {printf("EXPRESSION : %s",(yyvsp[-2].string));}
-#line 1723 "syntax.tab.c"
+#line 1725 "syntax.tab.c"
     break;
 
 
-#line 1727 "syntax.tab.c"
+#line 1729 "syntax.tab.c"
 
       default: break;
     }
@@ -1955,7 +1957,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 324 "syntax.y"
+#line 326 "syntax.y"
 
 /*BLOCK C: Functions*/
 int  main(int argc,char ** argv){
@@ -2014,7 +2016,6 @@ int  main(int argc,char ** argv){
 
 
 
-extern int line_no;
 
 void yyerror(char *s) {
     error_no++;

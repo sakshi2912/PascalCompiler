@@ -84,7 +84,7 @@ void hashtbl_destroy(HASHTBL *hashtbl)
 	free(hashtbl);
 }
 
-int hashtbl_insert(HASHTBL *hashtbl, const char *key, void *data, int scope, char *value)
+int hashtbl_insert(HASHTBL *hashtbl, const char *key, void *data, int scope, char *value, int line_no)
 {
 	struct hashnode_s *node;
 	hash_size hash = hashtbl->hashfunc(key) % hashtbl->size;
@@ -112,6 +112,7 @@ int hashtbl_insert(HASHTBL *hashtbl, const char *key, void *data, int scope, cha
 	node->data = data;
 	node->value = mystrdup(value);
 	node->scope = scope;
+	node->line_no = line_no;
 	node->next = hashtbl->nodes[hash];
 	hashtbl->nodes[hash] = node;
 
@@ -178,14 +179,14 @@ void *print_table(HASHTBL *hashtbl)
 	hash_size n;
 	struct hashnode_s *node, *oldnode;
 	printf("Symbol table\n\n");
-	printf("KEY\t\tDATATYPE\tVALUE\tSCOPE\n-------------------------------------------\n\n");
+	printf("KEY\t\tDATATYPE\tVALUE\tSCOPE\tLINE_NO\n-------------------------------------------------------\n\n");
 	for (n = 0; n < hashtbl->size; ++n)
 	{
 		node = hashtbl->nodes[n];
 		while (node)
 		{
 
-			printf("%s\t\t%s\t\t%s\t%d\n", node->key, (char *)node->data, (char *)node->value, node->scope);
+			printf("%s\t\t%s\t\t%s\t%d\t%d\n", node->key, (char *)node->data, (char *)node->value, node->scope, node->line_no);
 			oldnode = node;
 			node = node->next;
 		}

@@ -13,6 +13,8 @@ HASHTBL *symbol; //Symbol Table declaration (global)
 //#define MAX_LINE_SIZE 256
 
 char filename[64];
+extern int line_no;
+
 extern FILE *yyin;
 int scope; //global variable for scope, initialized to 0
 int datatype; 
@@ -105,7 +107,7 @@ constdefs: T_CONST constant_defs T_SEMI
     ;
         
 constant_defs: constant_defs T_SEMI T_ID T_EQU expression 
-    | T_ID T_EQU expression  {hashtbl_insert(symbol,$1,$3,scope,"constant");}
+    | T_ID T_EQU expression  {hashtbl_insert(symbol,$1,$3,scope,"constant",line_no);}
     ;
             
 expression: expression T_RELOP expression
@@ -182,8 +184,8 @@ vardefs: T_VAR variable_defs T_SEMI
     |/*empty*/
     ;
     
-variable_defs: variable_defs T_SEMI identifiers T_COLON typename {hashtbl_insert(symbol,$3,$5,scope,"NULL");}
-    | identifiers T_COLON typename {hashtbl_insert(symbol,$1,$3,scope,"NULL");}
+variable_defs: variable_defs T_SEMI identifiers T_COLON typename {hashtbl_insert(symbol,$3,$5,scope,"NULL",line_no);}
+    | identifiers T_COLON typename {hashtbl_insert(symbol,$1,$3,scope,"NULL",line_no);}
     ;
     
 identifiers: T_ID { $$ = $1; }
@@ -195,28 +197,28 @@ identifiers: T_ID { $$ = $1; }
                             if(datatype==0)
                             {
                                 strcpy(res,"integer");
-                                hashtbl_insert(symbol,$3,"integer",scope,"NULL");
+                                hashtbl_insert(symbol,$3,"integer",scope,"NULL",line_no);
 
                             }
                             else if(datatype==1)
                             {
                                 strcpy(res,"real");
-                                hashtbl_insert(symbol,$3,"real",scope,"NULL");
+                                hashtbl_insert(symbol,$3,"real",scope,"NULL",line_no);
                             }
                             else if(datatype==2)
                             {
                                 strcpy(res,"boolean");
-                                hashtbl_insert(symbol,$3,"boolean",scope,"NULL");
+                                hashtbl_insert(symbol,$3,"boolean",scope,"NULL",line_no);
                             }
                             else if(datatype==3)
                             {
                                 strcpy(res,"character");
-                                hashtbl_insert(symbol,$3,"character",scope,"NULL");
+                                hashtbl_insert(symbol,$3,"character",scope,"NULL",line_no);
                             }
                             else if(datatype==4)
                             {
                                 strcpy(res,"string");
-                                hashtbl_insert(symbol,$3,"strifn",scope,"NULL");
+                                hashtbl_insert(symbol,$3,"strifn",scope,"NULL",line_no);
                             }
                             }
     ;
@@ -286,7 +288,7 @@ if_statement: T_IF expression T_THEN statement T_SEMI
 while_statement: T_WHILE  expression {scope++;} T_DO statement {hashtbl_get(symbol,scope);scope--;} 
     ;
 
-for_statement: T_FOR T_ID T_ASSIGN  iter_space {scope++;} T_DO statement {hashtbl_insert(symbol,$2,"integer",scope,"NULL"); 
+for_statement: T_FOR T_ID T_ASSIGN  iter_space {scope++;} T_DO statement {hashtbl_insert(symbol,$2,"integer",scope,"NULL",line_no); 
                                                                                     //hashtbl_get(symbol,scope);
                                                                                     scope--; 
 }
@@ -379,7 +381,6 @@ int  main(int argc,char ** argv){
 
 
 
-extern int line_no;
 
 void yyerror(char *s) {
     error_no++;
