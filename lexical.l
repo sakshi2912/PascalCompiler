@@ -13,6 +13,7 @@ FILE *fd; //a global copy of the input file -- accessible from error funtion
 int line_no = 1;
 int errors = 0;
 
+
 char strbuffer[200];//a string buffer to properly return strings
 char *ptr; //used in strtol function
 int doubletoint; //convert double to int

@@ -93,16 +93,26 @@ T_EQU
 %%
 /*BLOCK B: Rules block*/
 
-program: header declarations subprograms comp_statement T_DOT
+program: header declarations subprograms comp_statement T_DOT 
     ;
 
 header: T_PROGRAM T_ID T_SEMI 
+| error  {
+           
+            yyerrok;
+            yyclearin;
+            }
     ;
 
-declarations: constdefs typedefs vardefs
-    ;
+declarations: constdefs typedefs vardefs 
+| error  {
+            yyerrok;
+            yyclearin;
+            }
+  
 
 constdefs: T_CONST constant_defs T_SEMI 
+
     |/*empty*/
     ;
         
@@ -122,14 +132,22 @@ expression: expression T_RELOP expression
     | T_LENGTH T_LPAREN expression T_RPAREN
     | constant { $$ =$1;} 
     | T_LPAREN expression T_RPAREN
+   
     ;
             
 variable: T_ID { $$ = $1;}
     | variable T_LBRACK expressions T_RBRACK 
+     | error  {
+            yyerrok;
+            yyclearin;
+            
+            }
+    
     ;
          
 expressions: expressions T_COMMA expression 
     | expression 
+    
     ;
             
 constant: T_ICONST {$$ =$1; datatype=0;}
@@ -186,6 +204,7 @@ vardefs: T_VAR variable_defs T_SEMI
     
 variable_defs: variable_defs T_SEMI identifiers T_COLON typename {hashtbl_insert(symbol,$3,$5,scope,"NULL",line_no);}
     | identifiers T_COLON typename {hashtbl_insert(symbol,$1,$3,scope,"NULL",line_no);}
+    
     ;
     
 identifiers: T_ID { $$ = $1; }
@@ -196,29 +215,24 @@ identifiers: T_ID { $$ = $1; }
                             char res[10];
                             if(datatype==0)
                             {
-                                strcpy(res,"integer");
                                 hashtbl_insert(symbol,$3,"integer",scope,"NULL",line_no);
 
                             }
                             else if(datatype==1)
                             {
-                                strcpy(res,"real");
                                 hashtbl_insert(symbol,$3,"real",scope,"NULL",line_no);
                             }
                             else if(datatype==2)
                             {
-                                strcpy(res,"boolean");
                                 hashtbl_insert(symbol,$3,"boolean",scope,"NULL",line_no);
                             }
                             else if(datatype==3)
                             {
-                                strcpy(res,"character");
                                 hashtbl_insert(symbol,$3,"character",scope,"NULL",line_no);
                             }
                             else if(datatype==4)
                             {
-                                strcpy(res,"string");
-                                hashtbl_insert(symbol,$3,"strifn",scope,"NULL",line_no);
+                                hashtbl_insert(symbol,$3,"string",scope,"NULL",line_no);
                             }
                             }
     ;
@@ -229,6 +243,7 @@ subprograms: subprograms subprogram T_SEMI
     
 subprogram: sub_header T_SEMI T_FORWARD
     | sub_header T_SEMI declarations subprograms comp_statement
+    
     ;
     
 sub_header: T_FUNCTION T_ID formal_parameters T_COLON typename
@@ -248,10 +263,19 @@ pass: T_VAR
     ;
     
 comp_statement: T_BEGIN statements T_END 
+
     ; 
 
 statements: statements T_SEMI statement
     | statement
+       
+    | error  {
+           // printf("Error at IF\n");
+       
+            yyerrok;
+            yyclearin;
+            
+            }
     ;
     
 statement: assignment 
@@ -262,8 +286,8 @@ statement: assignment
     | io_statement
     | comp_statement
     |//empty
+ 
     ;
-    
     
 assignment: variable T_ASSIGN expression {
                                             printf("New values : %s, %d\n", $1,$3); 
@@ -272,6 +296,7 @@ assignment: variable T_ASSIGN expression {
                                            
                                             sprintf(result, "%d", num); 
                                             hashtbl_update(symbol,$1,result);}
+          
     ;
 
 //shift-reduce error on IF: 
@@ -282,16 +307,16 @@ assignment: variable T_ASSIGN expression {
 
 if_statement: T_IF expression T_THEN statement T_SEMI
     | T_IF expression T_THEN statement T_SEMI T_ELSE statement
-    | error {yyerrok;yyclearin;printf("Error at IF--ignoring. Total errors: %d\n",error_no);} //ignore error on "IF" so that parsing can complete
+      
     ;
     
-while_statement: T_WHILE  expression {scope++;} T_DO statement {hashtbl_get(symbol,scope);scope--;} 
+while_statement: T_WHILE  expression {scope++;} T_DO statement T_SEMI {hashtbl_get(symbol,scope);scope--;} 
     ;
 
-for_statement: T_FOR T_ID T_ASSIGN  iter_space {scope++;} T_DO statement {hashtbl_insert(symbol,$2,"integer",scope,"NULL",line_no); 
+for_statement: T_FOR T_ID T_ASSIGN  iter_space {scope++;} T_DO statement  {hashtbl_insert(symbol,$2,"integer",scope,"NULL",line_no); 
                                                                                     //hashtbl_get(symbol,scope);
                                                                                     scope--; 
-}
+}  
     ;
 
 iter_space: expression T_TO expression {printf("EXPRESSION : %s",$1);}
@@ -304,7 +329,7 @@ subprogram_call: T_ID
     
 
 io_statement: T_READ T_LPAREN read_list T_RPAREN
-    | T_WRITE T_LPAREN write_list T_RPAREN
+    | T_WRITE T_LPAREN write_list T_RPAREN 
     ;
     
 read_list: read_list T_COMMA read_item
@@ -384,6 +409,7 @@ int  main(int argc,char ** argv){
 
 void yyerror(char *s) {
     error_no++;
+    
     fprintf(stderr, "line %d: %s\n", line_no, s);
 }
 

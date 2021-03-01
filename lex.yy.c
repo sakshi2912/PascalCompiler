@@ -761,6 +761,7 @@ FILE *fd; //a global copy of the input file -- accessible from error funtion
 int line_no = 1;
 int errors = 0;
 
+
 char strbuffer[200];//a string buffer to properly return strings
 char *ptr; //used in strtol function
 int doubletoint; //convert double to int
@@ -777,7 +778,7 @@ double decRealHandler(char *str); //convert string to real
 double hexRealHandler(char *str); //conver hex real string to real
 
 
-#line 781 "lex.yy.c"
+#line 782 "lex.yy.c"
 
 /*Kefalaioi kai pezoi xarakthres toy agglikoy alfavhtoy*/
 /*ola ta ari8mhtika pshfia*/
@@ -787,7 +788,7 @@ double hexRealHandler(char *str); //conver hex real string to real
 /*eidikoi xarakthres*/
 /*all ASCII*/
 /*Part B: RULES BLOCK*/
-#line 791 "lex.yy.c"
+#line 792 "lex.yy.c"
 
 #define INITIAL 0
 #define STRINGS 1
@@ -1006,9 +1007,9 @@ YY_DECL
 		}
 
 	{
-#line 57 "lexical.l"
+#line 58 "lexical.l"
 
-#line 1012 "lex.yy.c"
+#line 1013 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1067,278 +1068,278 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 58 "lexical.l"
+#line 59 "lexical.l"
 {yylval.string = strdup(yytext); return(T_PROGRAM); } //passing yytext as string to yylvalue...
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 59 "lexical.l"
+#line 60 "lexical.l"
 {yylval.string = strdup(yytext); return(T_CONST);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 60 "lexical.l"
+#line 61 "lexical.l"
 {yylval.string = strdup(yytext); return(T_TYPE);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 61 "lexical.l"
+#line 62 "lexical.l"
 {yylval.string = strdup(yytext); return(T_ARRAY);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 62 "lexical.l"
+#line 63 "lexical.l"
 {yylval.string = strdup(yytext); return(T_OF);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 63 "lexical.l"
+#line 64 "lexical.l"
 {yylval.string = strdup(yytext); return(T_VAR);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 64 "lexical.l"
+#line 65 "lexical.l"
 {yylval.string = strdup(yytext); return(T_FORWARD);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 65 "lexical.l"
+#line 66 "lexical.l"
 {yylval.string = strdup(yytext); return(T_FUNCTION);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 66 "lexical.l"
+#line 67 "lexical.l"
 {yylval.string = strdup(yytext); return(T_PROCEDURE);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 67 "lexical.l"
+#line 68 "lexical.l"
 {yylval.string = strdup(yytext); return(T_INTEGER);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 68 "lexical.l"
+#line 69 "lexical.l"
 {yylval.string = strdup(yytext); return(T_REAL);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 69 "lexical.l"
+#line 70 "lexical.l"
 {yylval.string = strdup(yytext); return(T_BOOLEAN);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 70 "lexical.l"
+#line 71 "lexical.l"
 {yylval.string = strdup(yytext); return(T_CHAR);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 71 "lexical.l"
+#line 72 "lexical.l"
 {yylval.string = strdup(yytext); return(T_STRING);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 72 "lexical.l"
+#line 73 "lexical.l"
 {yylval.string = strdup(yytext); return(T_BEGIN);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 73 "lexical.l"
+#line 74 "lexical.l"
 {yylval.string = strdup(yytext); return(T_END);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 74 "lexical.l"
+#line 75 "lexical.l"
 {yylval.string = strdup(yytext); return(T_IF);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 75 "lexical.l"
+#line 76 "lexical.l"
 {yylval.string = strdup(yytext); return(T_THEN);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 76 "lexical.l"
+#line 77 "lexical.l"
 {yylval.string = strdup(yytext); return(T_ELSE);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 77 "lexical.l"
+#line 78 "lexical.l"
 {yylval.string = strdup(yytext); return(T_WHILE);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 78 "lexical.l"
+#line 79 "lexical.l"
 {yylval.string = strdup(yytext); return(T_DO);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 79 "lexical.l"
+#line 80 "lexical.l"
 {yylval.string = strdup(yytext); return(T_FOR);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 80 "lexical.l"
+#line 81 "lexical.l"
 {yylval.string = strdup(yytext); return(T_DOWNTO);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 81 "lexical.l"
+#line 82 "lexical.l"
 {yylval.string = strdup(yytext); return(T_TO);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 82 "lexical.l"
+#line 83 "lexical.l"
 {yylval.string = strdup(yytext); return(T_READ);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 83 "lexical.l"
+#line 84 "lexical.l"
 {yylval.string = strdup(yytext); return(T_WRITE);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 84 "lexical.l"
+#line 85 "lexical.l"
 {yylval.string = strdup(yytext); return(T_LENGTH);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 86 "lexical.l"
+#line 87 "lexical.l"
 {yylval.boolean = 1; return(T_BCONST);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 87 "lexical.l"
+#line 88 "lexical.l"
 {yylval.boolean = 0; return(T_BCONST);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 90 "lexical.l"
+#line 91 "lexical.l"
 {yylval.string = strdup(yytext); return(T_RELOP);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 91 "lexical.l"
+#line 92 "lexical.l"
 {yylval.string = strdup(yytext); return(T_ADDOP);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 92 "lexical.l"
+#line 93 "lexical.l"
 {yylval.string = strdup(yytext); return(T_OROP);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 93 "lexical.l"
+#line 94 "lexical.l"
 {yylval.string = strdup(yytext); return(T_NOTOP);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 94 "lexical.l"
+#line 95 "lexical.l"
 {yylval.string = strdup(yytext); return(T_MULDIVANDOP);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 96 "lexical.l"
+#line 97 "lexical.l"
 {yylval.string = strdup(yytext); return(T_LPAREN);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 97 "lexical.l"
+#line 98 "lexical.l"
 {yylval.string = strdup(yytext); return(T_RPAREN);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 98 "lexical.l"
+#line 99 "lexical.l"
 {yylval.string = strdup(yytext); return(T_SEMI);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 99 "lexical.l"
+#line 100 "lexical.l"
 {yylval.string = strdup(yytext); return(T_DOT);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 100 "lexical.l"
+#line 101 "lexical.l"
 {yylval.string = strdup(yytext); return(T_COMMA);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 101 "lexical.l"
+#line 102 "lexical.l"
 {yylval.string = strdup(yytext); return(T_EQU);}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 102 "lexical.l"
+#line 103 "lexical.l"
 {yylval.string = strdup(yytext); return(T_COLON);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 103 "lexical.l"
+#line 104 "lexical.l"
 {yylval.string = strdup(yytext); return(T_LBRACK);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 104 "lexical.l"
+#line 105 "lexical.l"
 {yylval.string = strdup(yytext); return(T_RBRACK);}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 105 "lexical.l"
+#line 106 "lexical.l"
 {yylval.string = strdup(yytext); return(T_ASSIGN);}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 106 "lexical.l"
+#line 107 "lexical.l"
 {yylval.string = strdup(yytext); return(T_DOTDOT);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 108 "lexical.l"
+#line 109 "lexical.l"
 {line_no++;} //increase line counter when '\n' is encountered
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 111 "lexical.l"
+#line 112 "lexical.l"
 {yylval.string = strdup(yytext); return(T_ID);} 
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 114 "lexical.l"
+#line 115 "lexical.l"
 {yylval.integer = atoi(yytext);return(T_ICONST);}//INTEGER CONST
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 116 "lexical.l"
+#line 117 "lexical.l"
 {yylval.real = atof(yytext);return(T_RCONST);} //REAL CONST
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 118 "lexical.l"
+#line 119 "lexical.l"
 {yylval.integer = strtol(yytext,&ptr,16);return(T_ICONST);}//HEX INTEGER CONST
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 121 "lexical.l"
+#line 122 "lexical.l"
 {yylval.real = decRealHandler(yytext);return(T_RCONST);}//REAL CONST EXP OR NOT
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 123 "lexical.l"
+#line 124 "lexical.l"
 {yylval.real = hexRealHandler(yytext);return(T_RCONST);}//HEX REAL CONST
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 125 "lexical.l"
+#line 126 "lexical.l"
 {yylval.character=yytext[1];return(T_CCONST);} //CHAR CONST
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 127 "lexical.l"
+#line 128 "lexical.l"
 {BEGIN(STRINGS);strbuffer[0] = '\0';}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 128 "lexical.l"
+#line 129 "lexical.l"
 {BEGIN(INITIAL);strcpy(yylval.string, strbuffer);return(T_STRING);}
 	YY_BREAK
 case 56:
@@ -1346,81 +1347,81 @@ case 56:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 129 "lexical.l"
+#line 130 "lexical.l"
 {}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 130 "lexical.l"
+#line 131 "lexical.l"
 {strcat(strbuffer, yytext);}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 131 "lexical.l"
+#line 132 "lexical.l"
 {strcat(strbuffer, yytext);}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 132 "lexical.l"
+#line 133 "lexical.l"
 {strcat(strbuffer, yytext);}
 	YY_BREAK
 case YY_STATE_EOF(STRINGS):
-#line 133 "lexical.l"
+#line 134 "lexical.l"
 {ERROR("Strings must close with \" !",yytext);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 134 "lexical.l"
+#line 135 "lexical.l"
 {line_no++;} //increase the line counter when newline occurs in a string
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 135 "lexical.l"
+#line 136 "lexical.l"
 {strcat(strbuffer, yytext);}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 137 "lexical.l"
+#line 138 "lexical.l"
 {BEGIN(COMMENTS);}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 138 "lexical.l"
+#line 139 "lexical.l"
 {BEGIN(INITIAL);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 139 "lexical.l"
+#line 140 "lexical.l"
 {line_no++;} //increase the line counter when newline occurs in a comment
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 140 "lexical.l"
+#line 141 "lexical.l"
 {}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENTS):
-#line 142 "lexical.l"
+#line 143 "lexical.l"
 {return(0);}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 145 "lexical.l"
+#line 146 "lexical.l"
 {/*return nothing for whitespaces*/}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 147 "lexical.l"
+#line 148 "lexical.l"
 {yyless(1); errors++; ERROR("illegal token",yytext); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 150 "lexical.l"
+#line 151 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 1424 "lex.yy.c"
+#line 1425 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2423,7 +2424,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 150 "lexical.l"
+#line 151 "lexical.l"
 
 void ERROR (const char msg [], char *text) {
     /* code to print the erroneous line

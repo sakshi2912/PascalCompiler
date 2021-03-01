@@ -15,12 +15,10 @@ x:=30;
 s:=True;
 z:=30.33;
 if (x<=y) then
-   greater := 33;
-
+   greater := 33
 else
    greater := 444;
 
-
-write (greater)
-
+write (greater);
+x:=49;
 end.
