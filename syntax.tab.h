@@ -105,7 +105,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 32 "syntax.y"
+#line 24 "syntax.y"
 
   unsigned int integer;
   double real;

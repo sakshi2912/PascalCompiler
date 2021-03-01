@@ -108,15 +108,14 @@ ASCII [ -~]
 \n      {line_no++;} //increase line counter when '\n' is encountered
 
 
-(_)?{L}({L}|{D}|_)*({L}|{D})|{L}* {yylval.string = strdup(yytext); return(T_ID);} //ID _hashtbl_insert(symbol,yytext,NULL,0);
+(_)?{L}({L}|{D}|_)*({L}|{D})|{L}* {yylval.string = strdup(yytext); return(T_ID);} 
 
 
 {Dp}({D})*|0 {yylval.integer = atoi(yytext);return(T_ICONST);}//INTEGER CONST
 
-{Dp}({D})*[Ee][+-]?(({D})*{Dp}) {doubletoint = atof(yytext);yylval.integer = doubletoint;return(T_ICONST);}
+{Dp}({D})*[Ee][+-]?(({D})*{Dp}) {yylval.real = atof(yytext);return(T_RCONST);} //REAL CONST
 
 [0][Xx]({Dp}|{Hex})({Hex}|{D})* {yylval.integer = strtol(yytext,&ptr,16);return(T_ICONST);}//HEX INTEGER CONST
-
 
 
 ({Dp}({D})*)?"."([0]|({D})*{Dp})([Ee]([+-]?{D}*){Dp})? {yylval.real = decRealHandler(yytext);return(T_RCONST);}//REAL CONST EXP OR NOT

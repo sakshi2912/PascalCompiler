@@ -18,8 +18,6 @@ int scope; //global variable for scope, initialized to 0
 int datatype; 
 error_no = 0; 
 //global variable for error count initialized to 0
-#define MAX_ERRORS 5 
-//max number of errors
 
 %}
 
@@ -47,7 +45,7 @@ error_no = 0;
 //chars
 %token <character> T_CCONST
 
-%type <string>	identifiers typename expression variable type_defs read_item assignment
+%type <string>	identifiers typename expression variable type_defs read_item assignment iter_space
 %type <integer> constant  
 
 
@@ -132,11 +130,11 @@ expressions: expressions T_COMMA expression
     | expression 
     ;
             
-constant: T_ICONST {$$ =$1;}
-    | T_RCONST {$$ =$1;}
-    | T_BCONST {$$ =$1;}
-    | T_CCONST {$$ =$1;}
-    | T_SCONST {$$ =$1;}
+constant: T_ICONST {$$ =$1; datatype=0;}
+    | T_RCONST {$$ =$1; datatype =1;}
+    | T_BCONST {$$ =$1; datatype=2;}
+    | T_CCONST {$$ =$1; datatype=3;}
+    | T_SCONST {$$ =$1;datatype=4;}
     ;
         
 typedefs: T_TYPE type_defs T_SEMI
@@ -171,11 +169,11 @@ sign: T_ADDOP
     |/*empty*/
     ;
     
-typename: T_INTEGER { $$ = $1; }
-    | T_REAL { $$ = $1; }
-    | T_BOOLEAN { $$ = $1; }
-    | T_CHAR { $$ = $1; }
-    | T_STRING { $$ = $1; }
+typename: T_INTEGER { $$ = $1; datatype=0;}
+    | T_REAL { $$ = $1;  datatype=1;}
+    | T_BOOLEAN { $$ = $1;  datatype=2;}
+    | T_CHAR { $$ = $1;  datatype=3;}
+    | T_STRING { $$ = $1;  datatype=4;}
     | T_ID {$$ = $1;}
     ;
     
@@ -189,7 +187,38 @@ variable_defs: variable_defs T_SEMI identifiers T_COLON typename {hashtbl_insert
     ;
     
 identifiers: T_ID { $$ = $1; }
-    | identifiers T_COMMA T_ID { $$=$1; }
+    | identifiers T_COMMA T_ID 
+                            { 
+                            
+                            //$$=$1; 
+                            char res[10];
+                            if(datatype==0)
+                            {
+                                strcpy(res,"integer");
+                                hashtbl_insert(symbol,$3,"integer",scope,"NULL");
+
+                            }
+                            else if(datatype==1)
+                            {
+                                strcpy(res,"real");
+                                hashtbl_insert(symbol,$3,"real",scope,"NULL");
+                            }
+                            else if(datatype==2)
+                            {
+                                strcpy(res,"boolean");
+                                hashtbl_insert(symbol,$3,"boolean",scope,"NULL");
+                            }
+                            else if(datatype==3)
+                            {
+                                strcpy(res,"character");
+                                hashtbl_insert(symbol,$3,"character",scope,"NULL");
+                            }
+                            else if(datatype==4)
+                            {
+                                strcpy(res,"string");
+                                hashtbl_insert(symbol,$3,"strifn",scope,"NULL");
+                            }
+                            }
     ;
     
 subprograms: subprograms subprogram T_SEMI
@@ -249,22 +278,22 @@ assignment: variable T_ASSIGN expression {
 // %nonassoc T_THEN
 // %nonassoc T_ELSE see ORilley page 208
 
-if_statement: T_IF expression T_THEN statement 
-    | T_IF expression T_THEN statement  T_ELSE statement
+if_statement: T_IF expression T_THEN statement T_SEMI
+    | T_IF expression T_THEN statement T_SEMI T_ELSE statement
     | error {yyerrok;yyclearin;printf("Error at IF--ignoring. Total errors: %d\n",error_no);} //ignore error on "IF" so that parsing can complete
     ;
     
 while_statement: T_WHILE  expression {scope++;} T_DO statement {hashtbl_get(symbol,scope);scope--;} 
     ;
 
-for_statement: T_FOR T_ID T_ASSIGN iter_space {scope++;} T_DO statement {hashtbl_insert(symbol,$2,"integer",scope,"NULL"); 
-//hashtbl_get(symbol,scope);
-scope--; 
+for_statement: T_FOR T_ID T_ASSIGN  iter_space {scope++;} T_DO statement {hashtbl_insert(symbol,$2,"integer",scope,"NULL"); 
+                                                                                    //hashtbl_get(symbol,scope);
+                                                                                    scope--; 
 }
     ;
 
-iter_space: expression T_TO expression
-    | expression T_DOWNTO expression
+iter_space: expression T_TO expression {printf("EXPRESSION : %s",$1);}
+    |  expression T_DOWNTO expression 
     ;
     
 subprogram_call: T_ID
@@ -386,6 +415,7 @@ unmatched: T_IF expression T_THEN if_statement
     | T_IF expression T_THEN matched T_ELSE unmatched
     ;
 
+{Dp}({D})*[Ee][+-]?(({D})*{Dp}) {doubletoint = atof(yytext);yylval.integer = doubletoint;return(T_ICONST);}
 
 
 */

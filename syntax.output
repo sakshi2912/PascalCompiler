@@ -115,8 +115,8 @@ Grammar
 
    83 assignment: variable T_ASSIGN expression
 
-   84 if_statement: T_IF expression T_THEN statement
-   85             | T_IF expression T_THEN statement T_ELSE statement
+   84 if_statement: T_IF expression T_THEN statement T_SEMI
+   85             | T_IF expression T_THEN statement T_SEMI T_ELSE statement
    86             | error
 
    87 $@1: %empty
@@ -192,7 +192,7 @@ Terminals, with rules where they appear
     T_NOTOP <string> (295) 14
     T_LPAREN <string> (296) 16 17 19 34 66 94 95 96
     T_RPAREN <string> (297) 16 17 19 34 66 94 95 96
-    T_SEMI <string> (298) 2 4 6 29 31 53 55 59 61 62 68 73
+    T_SEMI <string> (298) 2 4 6 29 31 53 55 59 61 62 68 73 84 85
     T_DOT <string> (299) 1
     T_COMMA <string> (300) 22 36 58 97 100
     T_COLON <string> (301) 55 56 63 68 69
@@ -312,7 +312,7 @@ Nonterminals, with rules where they appear
     $@2 (87)
         on left: 89
         on right: 90
-    iter_space (88)
+    iter_space <string> (88)
         on left: 91 92
         on right: 90
     subprogram_call (89)
@@ -784,8 +784,8 @@ State 43
 
 State 44
 
-   84 if_statement: T_IF . expression T_THEN statement
-   85             | T_IF . expression T_THEN statement T_ELSE statement
+   84 if_statement: T_IF . expression T_THEN statement T_SEMI
+   85             | T_IF . expression T_THEN statement T_SEMI T_ELSE statement
 
     T_LENGTH  shift, and go to state 27
     T_ID      shift, and go to state 28
@@ -852,9 +852,9 @@ State 49
 
     T_LPAREN  shift, and go to state 88
 
-    T_LBRACK  reduce using rule 20 (variable)
-    T_ASSIGN  reduce using rule 20 (variable)
-    $default  reduce using rule 93 (subprogram_call)
+    T_END     reduce using rule 93 (subprogram_call)
+    T_SEMI    reduce using rule 93 (subprogram_call)
+    $default  reduce using rule 20 (variable)
 
 
 State 50
@@ -1274,8 +1274,8 @@ State 83
    10           | expression . T_OROP expression
    11           | expression . T_ADDOP expression
    12           | expression . T_MULDIVANDOP expression
-   84 if_statement: T_IF expression . T_THEN statement
-   85             | T_IF expression . T_THEN statement T_ELSE statement
+   84 if_statement: T_IF expression . T_THEN statement T_SEMI
+   85             | T_IF expression . T_THEN statement T_SEMI T_ELSE statement
 
     T_THEN         shift, and go to state 122
     T_RELOP        shift, and go to state 73
@@ -1742,8 +1742,8 @@ State 121
 
 State 122
 
-   84 if_statement: T_IF expression T_THEN . statement
-   85             | T_IF expression T_THEN . statement T_ELSE statement
+   84 if_statement: T_IF expression T_THEN . statement T_SEMI
+   85             | T_IF expression T_THEN . statement T_SEMI T_ELSE statement
 
     error    shift, and go to state 43
     T_BEGIN  shift, and go to state 19
@@ -1754,8 +1754,6 @@ State 122
     T_WRITE  shift, and go to state 48
     T_ID     shift, and go to state 49
 
-    T_END   reduce using rule 82 (statement)
-    T_ELSE  reduce using rule 82 (statement)
     T_SEMI  reduce using rule 82 (statement)
 
     variable         go to state 50
@@ -2135,12 +2133,10 @@ State 158
 
 State 159
 
-   84 if_statement: T_IF expression T_THEN statement .
-   85             | T_IF expression T_THEN statement . T_ELSE statement
+   84 if_statement: T_IF expression T_THEN statement . T_SEMI
+   85             | T_IF expression T_THEN statement . T_SEMI T_ELSE statement
 
-    T_ELSE  shift, and go to state 180
-
-    $default  reduce using rule 84 (if_statement)
+    T_SEMI  shift, and go to state 180
 
 
 State 160
@@ -2157,7 +2153,6 @@ State 160
     T_ID     shift, and go to state 49
 
     T_END   reduce using rule 82 (statement)
-    T_ELSE  reduce using rule 82 (statement)
     T_SEMI  reduce using rule 82 (statement)
 
     variable         go to state 50
@@ -2368,30 +2363,12 @@ State 179
 
 State 180
 
-   85 if_statement: T_IF expression T_THEN statement T_ELSE . statement
+   84 if_statement: T_IF expression T_THEN statement T_SEMI .
+   85             | T_IF expression T_THEN statement T_SEMI . T_ELSE statement
 
-    error    shift, and go to state 43
-    T_BEGIN  shift, and go to state 19
-    T_IF     shift, and go to state 44
-    T_WHILE  shift, and go to state 45
-    T_FOR    shift, and go to state 46
-    T_READ   shift, and go to state 47
-    T_WRITE  shift, and go to state 48
-    T_ID     shift, and go to state 49
+    T_ELSE  shift, and go to state 193
 
-    T_END   reduce using rule 82 (statement)
-    T_ELSE  reduce using rule 82 (statement)
-    T_SEMI  reduce using rule 82 (statement)
-
-    variable         go to state 50
-    comp_statement   go to state 51
-    statement        go to state 193
-    assignment       go to state 54
-    if_statement     go to state 55
-    while_statement  go to state 56
-    for_statement    go to state 57
-    subprogram_call  go to state 58
-    io_statement     go to state 59
+    $default  reduce using rule 84 (if_statement)
 
 
 State 181
@@ -2525,9 +2502,29 @@ State 192
 
 State 193
 
-   85 if_statement: T_IF expression T_THEN statement T_ELSE statement .
+   85 if_statement: T_IF expression T_THEN statement T_SEMI T_ELSE . statement
 
-    $default  reduce using rule 85 (if_statement)
+    error    shift, and go to state 43
+    T_BEGIN  shift, and go to state 19
+    T_IF     shift, and go to state 44
+    T_WHILE  shift, and go to state 45
+    T_FOR    shift, and go to state 46
+    T_READ   shift, and go to state 47
+    T_WRITE  shift, and go to state 48
+    T_ID     shift, and go to state 49
+
+    T_END   reduce using rule 82 (statement)
+    T_SEMI  reduce using rule 82 (statement)
+
+    variable         go to state 50
+    comp_statement   go to state 51
+    statement        go to state 201
+    assignment       go to state 54
+    if_statement     go to state 55
+    while_statement  go to state 56
+    for_statement    go to state 57
+    subprogram_call  go to state 58
+    io_statement     go to state 59
 
 
 State 194
@@ -2580,12 +2577,11 @@ State 196
     T_ID     shift, and go to state 49
 
     T_END   reduce using rule 82 (statement)
-    T_ELSE  reduce using rule 82 (statement)
     T_SEMI  reduce using rule 82 (statement)
 
     variable         go to state 50
     comp_statement   go to state 51
-    statement        go to state 201
+    statement        go to state 202
     assignment       go to state 54
     if_statement     go to state 55
     while_statement  go to state 56
@@ -2612,7 +2608,7 @@ State 198
     T_STRING   shift, and go to state 148
     T_ID       shift, and go to state 149
 
-    typename  go to state 202
+    typename  go to state 203
 
 
 State 199
@@ -2633,24 +2629,31 @@ State 200
     T_STRING   shift, and go to state 148
     T_ID       shift, and go to state 149
 
-    typename  go to state 203
+    typename  go to state 204
 
 
 State 201
+
+   85 if_statement: T_IF expression T_THEN statement T_SEMI T_ELSE statement .
+
+    $default  reduce using rule 85 (if_statement)
+
+
+State 202
 
    90 for_statement: T_FOR T_ID T_ASSIGN iter_space $@2 T_DO statement .
 
     $default  reduce using rule 90 (for_statement)
 
 
-State 202
+State 203
 
    33 type_def: T_ARRAY T_LBRACK dims T_RBRACK T_OF typename .
 
     $default  reduce using rule 33 (type_def)
 
 
-State 203
+State 204
 
    68 parameter_list: parameter_list T_SEMI pass identifiers T_COLON typename .
 
