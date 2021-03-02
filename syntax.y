@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdlib.h>
 #include <math.h>
-#include "hashtbl.c" //include the hash table
+#include "hashtbl.c" 
 HASHTBL *symbol; //Symbol Table declaration (global)
 #define atoa(x) #x
 
@@ -47,6 +47,7 @@ error_no = 0;
 //chars
 %token <character> T_CCONST
 
+// return for grammar rules
 %type <string>	identifiers typename expression variable type_defs read_item assignment iter_space
 %type <integer> constant  
 
@@ -271,7 +272,7 @@ statements: statements T_SEMI statement
     | statement
        
     | error  {
-           // printf("Error at IF\n");
+
        
             yyerrok;
             yyclearin;
