@@ -1,14 +1,12 @@
 
-/*part Α - statements block/*/
+/*part Α - statements block/*
 
 %{
 #include "syntax.tab.h" //include bison's header file
-//#include "syntax.tab.c" //include bison's .c file...not sure
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-//used in error function
 FILE *fd; //a global copy of the input file -- accessible from error funtion
 int line_no = 1;
 int errors = 0;
@@ -18,17 +16,9 @@ char strbuffer[200];//a string buffer to properly return strings
 char *ptr; //used in strtol function
 int doubletoint; //convert double to int
 
-
-//#include "hashtbl.h" //include the hash table
-//extern HASHTBL *symbol; //Symbol Table declaration (global)
-
-/*antistoixhsh lektikwn monadwn (telikwn katastasewn) me ari8mous - kwdikoys eksodoy*/
-
-
-void ERROR (const char msg [], char *text); //synarthsh epistrofis la8oys
+void ERROR (const char msg [], char *text); 
 double decRealHandler(char *str); //convert string to real
 double hexRealHandler(char *str); //conver hex real string to real
-
 
 %}
 
@@ -37,19 +27,12 @@ double hexRealHandler(char *str); //conver hex real string to real
 %x STRINGS
 %x COMMENTS
 
-/*Kefalaioi kai pezoi xarakthres toy agglikoy alfavhtoy*/
 L   [A-Za-z]
-/*ola ta ari8mhtika pshfia*/
 D   [0-9]
-/*ari8mhtika ektos toy mhdenos*/
 Dp  [1-9]
-/*Grammata poy xrhsimopioyntai sta dekaeksadika*/
 Hex [A-Fa-f]
-/*kena, tab, newlines*/
 W   [ \t] 
-/*eidikoi xarakthres*/
 SPEC [NnFfTtVvBbRr]
-/*all ASCII*/
 ASCII [ -~]
 
 identifier (_|{L})({L}|{D}|_){0,31}
@@ -169,7 +152,6 @@ void ERROR (const char msg [], char *text) {
     exit(1);}
     }
 
-//synarthseis xeirismoy ari8mwn
 double decRealHandler(char *str) {
 	char *b = str;
 	int decimal = 0;
@@ -256,12 +238,3 @@ double hexRealHandler(char *str) {
 	return decimal*pow(16, power);
 	}
 
-
-//cemetary -- things that i'm not 100% sure that must be erased
-/*
-
-//CASE & OTHERWISE NOT PRESENT IN GRAMMAR (must delete?)
-"CASE"      {yylval.string = strdup(yytext); return(T_CASE);}
-"OTHERWISE" {yylval.string = strdup(yytext); return(T_OTHERWISE);}
-
-*/
