@@ -108,6 +108,7 @@ declarations: constdefs typedefs vardefs
 | error  {
             yyerrok;
             yyclearin;
+            printf("Syntax error in Variable\n");    
             }
   
 
@@ -140,7 +141,7 @@ variable: T_ID { $$ = $1;}
      | error  {
             yyerrok;
             yyclearin;
-            
+                    
             }
     
     ;
@@ -444,7 +445,7 @@ unmatched: T_IF expression T_THEN if_statement
 
 {Dp}({D})*[Ee][+-]?(({D})*{Dp}) {doubletoint = atof(yytext);yylval.integer = doubletoint;return(T_ICONST);}
 
-
+(_)?{L}({L}|{D}|_)*({L}|{D})|{L}* {yylval.string = strdup(yytext); return(T_ID);} 
 */
 
 

@@ -52,7 +52,7 @@ SPEC [NnFfTtVvBbRr]
 /*all ASCII*/
 ASCII [ -~]
 
-
+identifier (_|{L})({L}|{D}|_){0,31}
 
 /*Part B: RULES BLOCK*/
 %%
@@ -109,8 +109,7 @@ ASCII [ -~]
 \n      {line_no++;} //increase line counter when '\n' is encountered
 
 
-(_)?{L}({L}|{D}|_)*({L}|{D})|{L}* {yylval.string = strdup(yytext); return(T_ID);} 
-
+{identifier} {yylval.string = strdup(yytext); return(T_ID);} 
 
 {Dp}({D})*|0 {yylval.integer = atoi(yytext);return(T_ICONST);}//INTEGER CONST
 
