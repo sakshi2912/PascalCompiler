@@ -15,7 +15,7 @@ for o := 10 downto 1 do
    write(o);
 
 if (n <= 0) and a then
-   x := 1.0 {{ or z := -1.0};
+   x := 1.0 {{ or z := -1.0}; {expression}
 else
   a:=10;
 
