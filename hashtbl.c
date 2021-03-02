@@ -178,15 +178,16 @@ void *print_table(HASHTBL *hashtbl)
 	int rem;
 	hash_size n;
 	struct hashnode_s *node, *oldnode;
+
 	printf("Symbol table\n\n");
-	printf("KEY\t\tDATATYPE\tVALUE\tSCOPE\tLINE_NO\n-------------------------------------------------------\n\n");
+	printf("KEY\tNAME\t\tDATATYPE\tVALUE\tSCOPE\tLINE_NO\n-----------------------------------------------------------\n\n");
 	for (n = 0; n < hashtbl->size; ++n)
 	{
 		node = hashtbl->nodes[n];
 		while (node)
 		{
-
-			printf("%s\t\t%s\t\t%s\t%d\t%d\n", node->key, (char *)node->data, (char *)node->value, node->scope, node->line_no);
+			hash_size hash = hashtbl->hashfunc(node->key) % hashtbl->size;
+			printf("%ld\t%s\t\t%s\t\t%s\t%d\t%d\n", hash, node->key, (char *)node->data, (char *)node->value, node->scope, node->line_no);
 			oldnode = node;
 			node = node->next;
 		}

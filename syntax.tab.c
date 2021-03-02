@@ -2035,7 +2035,11 @@ int  main(int argc,char ** argv){
 
     if(error_no ==0)
     {
-        printf("\nNo syntax errors.\n\n");
+        printf("\n------> No syntax errors.\n\n");
+    }
+    else if(error_no>0)
+    {
+        printf("\n------> %d errors.\n\n",error_no);
     }
     fclose(yyin);
     return(0);

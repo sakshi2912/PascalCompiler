@@ -111,7 +111,7 @@ identifier (_|{L})({L}|{D}|_){0,31}
 
 {identifier} {yylval.string = strdup(yytext); return(T_ID);} 
 
-{Dp}({D})*|0 {yylval.integer = atoi(yytext);return(T_ICONST);}//INTEGER CONST
+(-)?{Dp}({D})*|0 {yylval.integer = atoi(yytext);return(T_ICONST);}//INTEGER CONST
 
 {Dp}({D})*[Ee][+-]?(({D})*{Dp}) {yylval.real = atof(yytext);return(T_RCONST);} //REAL CONST
 
