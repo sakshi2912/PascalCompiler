@@ -367,15 +367,15 @@ int main(int argc, char *argv[])
 {
 	yyin = fopen(argv[1], "r");
 	FILE *filePointer;
-    printf("\t---------------------THREE ADDRESS CODE---------------------\n\n");
+    printf("\n\t---------------------THREE ADDRESS CODE---------------------\n\n");
 //FILE *filePointer= fopen("input.txt", "w"); 
 filePointer = fopen("input.txt", "w");
     if(!yyparse())
     {
 		print_table();
-        printf("\t\nParsing complete\n");
+        printf("\n\n\tParsing complete\n\n\n");
          printf("\t---------------------Quadruples-------------------------\n\n");
-    printf("\tOperator \t Arg1 \t\t Arg2 \t\t Result \n");
+    printf("\n\tOperator \t Arg1 \t\t Arg2 \t\t Result \n");
     int i;
     for(i=0;i<quadlen;i++)
     {
