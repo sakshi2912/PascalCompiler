@@ -259,23 +259,6 @@ assignment:ID {push_lit(yylval);} T_assign {push_sign();} expression
 
           ;
 
-multi_decl:OPB lit CLB multi_decl
-		  |empty
-		  ;
-
-assign:T_eq
-	  |empty
-	  ;
-
-multidim:OSCOPE array multidim
-		|empty
-		;
-		  
-		;
-array:CSCOPE
-	|lit CSCOPE
-	|lit ',' array
-	;
 
 expression:lit 
           |lit bin_arop {push_sign();}expression {codegen();}
@@ -379,6 +362,7 @@ int main(int argc, char *argv[])
 {
 	yyin = fopen(argv[1], "r");
 	FILE *filePointer;
+    printf("THREE ADDRESS CODE\n");
 //FILE *filePointer= fopen("input.txt", "w"); 
 filePointer = fopen("input.txt", "w");
     if(!yyparse())
@@ -456,7 +440,7 @@ void codegen_un()
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
     //printf("temporaries\n");
-    temp_add_update_node(temp, "-", "temporary",scope);
+    temp_add_update_node(temp, "-", "temp",scope);
      //void add_update_node(int line,char* name,char* value,char* type, int scope)
      //char st_t=st[top][0];
      char* add="1";
@@ -520,7 +504,7 @@ void codegen()
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
     //printf("temporaries\n");
-    temp_add_update_node(temp, "-", "temporary",scope);
+    temp_add_update_node(temp, "-", "temp",scope);
      //void add_update_node(int line,char* name,char* value,char* type, int scope)
     printf("%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st[top-1]));
@@ -548,7 +532,7 @@ temp_i++;
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temporary",scope);
+ temp_add_update_node(temp, "-", "temp",scope);
  printf("%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -582,7 +566,7 @@ void if1()//for the if clause
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temporary",scope);
+ temp_add_update_node(temp, "-", "temp",scope);
  printf("%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -619,7 +603,7 @@ int y=label[ltop--];
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temporary",scope);
+ temp_add_update_node(temp, "-", "temp",scope);
  printf("%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -653,7 +637,7 @@ void codegen_assigna()//for  conditions
 	strcpy(temp,"T");
 	sprintf(tmp_i, "%d", temp_i);
 	strcat(temp,tmp_i);
-	temp_add_update_node(temp, "-", "temporary",scope);
+	temp_add_update_node(temp, "-", "temp",scope);
 	printf("%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
 	//printf("%d\n",strlen(st[top]));
 	//if(strlen(st[top])==1)
@@ -732,7 +716,7 @@ void for2()
     strcpy(temp,"T");
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
-    temp_add_update_node(temp, "-", "temporary",scope);
+    temp_add_update_node(temp, "-", "temp",scope);
     printf("%s = not %s\n",temp,st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*4);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
