@@ -31,7 +31,6 @@ number	{digits}{opFraction}{opExponent}
 "double" {strcpy(type, yytext);return DOUBLE;}
 "void" {strcpy(type, yytext);return VOID;}
 "bool" {strcpy(type, yytext);return BOOL;}
-"while" return WHILE;
 "do" return DO;
 "for" return FOR;
 "to" return TO;

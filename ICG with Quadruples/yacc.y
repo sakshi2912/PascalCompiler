@@ -12,9 +12,7 @@ char temp[2]="t";
 int ltop=0;
 int label[20];
 int lnum=0;
-int l_while=0;
 int l_for=0;
-
 
 
 typedef struct node
@@ -219,7 +217,7 @@ quad q[100];
 %token HEADER VAR MAIN TO DOWN_TO THEN
 %token T_lt T_gt T_lteq T_gteq T_neq T_eqeq T_pl T_min T_mul T_div T_and T_or T_incr T_decr T_not T_eq T_assign T_comma T_semi T_dot T_END
 %token INT CHAR FLOAT DOUBLE VOID BOOL COUT COUTSTR INS CIN XTR
-%token IF ELSE WHILE DO FOR ELSE_IF T_RETURN
+%token IF ELSE DO FOR ELSE_IF T_RETURN
 %token ID NUM SINGLE_CHAR_VALUE
 %token OPB CLB OSCOPE CSCOPE
 
@@ -287,15 +285,11 @@ expression:lit
           |un_boolop expression
           ;
 
-loops:WHILE  {while1();} '(' cond_stmt')' {while2();} loopbody {while3();}
-     //|DO doloopbody WHILE'('cond_stmt')' T_semi
-     //|FOR '('cond_stmt_for{for1();} T_semicond_stmt_for{for2();} T_semicond_stmt_for{for3();}')'loopbody{for4();}
-     |FOR  cond_stmt_for { for1();} TO cond_stmt_for{for3();} DO loopbody{for4();}
+loops:FOR  cond_stmt_for { for1();} TO cond_stmt_for{for3();} DO loopbody{for4();}
      |FOR  cond_stmt_for { for1();} DOWN_TO cond_stmt_for{for3();} DO loopbody{for4();}
 
      | IF INS cond_stmt XTR THEN {if1();}  loopbody z{if3();}
-     //|IF '('cond_stmt')' {if1();} THEN loopbody z {if3();}
-     //|IF INS cond_stmt XTR THEN loopbody ELSE loopbody
+
      ;
 
 z:ELSE_IF INS cond_stmt XTR {if2();} THEN loopbody x
@@ -311,8 +305,7 @@ loopbody:OSCOPE c CSCOPE  T_semi
   	    |stmt T_semi
   	    ;
 
-//doloopbody:OSCOPE c CSCOPE
-  //        ;
+
 
 cond_stmt:stmt
          |cond
@@ -716,84 +709,7 @@ void if3()//after if clause body
     strcpy(q[quadlen].res,strcat(l,x));
     quadlen++;
 }
- 
-void while1()
-{
 
-    l_while = lnum;
-    printf("L%d: \n",lnum++);
-    q[quadlen].op = (char*)malloc(sizeof(char)*6);
-    q[quadlen].arg1 = NULL;
-    q[quadlen].arg2 = NULL;
-    q[quadlen].res = (char*)malloc(sizeof(char)*(lnum+2));
-    strcpy(q[quadlen].op,"Label");
-    char x[10];
-    sprintf(x,"%d",lnum-1);
-    char l[]="L";
-    strcpy(q[quadlen].res,strcat(l,x));
-    label_add_update_node(q[quadlen].res, "-", "label",scope);
-    quadlen++;
-}
-
-void while2()
-{
- strcpy(temp,"T");
- sprintf(tmp_i, "%d", temp_i);
- strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temporary",scope);
- printf("%s = not %s\n",temp,st[top]);
-    q[quadlen].op = (char*)malloc(sizeof(char)*4);
-    q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
-    q[quadlen].arg2 = NULL;
-    q[quadlen].res = (char*)malloc(sizeof(char)*strlen(temp));
-    strcpy(q[quadlen].op,"not");
-    strcpy(q[quadlen].arg1,st[top]);
-    strcpy(q[quadlen].res,temp);
-    quadlen++;
-    printf("if %s goto L%d\n",temp,lnum);
-    q[quadlen].op = (char*)malloc(sizeof(char)*3);
-    q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
-    q[quadlen].arg2 = NULL;
-    q[quadlen].res = (char*)malloc(sizeof(char)*(lnum+2));
-    strcpy(q[quadlen].op,"if");
-    strcpy(q[quadlen].arg1,temp);
-    char x[10];
-    sprintf(x,"%d",lnum);char l[]="L";
-    strcpy(q[quadlen].res,strcat(l,x));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
-    quadlen++;
-
- temp_i++;
- }
-
-void while3()
-{
-
-printf("goto L%d \n",l_while);
-q[quadlen].op = (char*)malloc(sizeof(char)*5);
-    q[quadlen].arg1 = NULL;
-    q[quadlen].arg2 = NULL;
-    q[quadlen].res = (char*)malloc(sizeof(char)*(l_while+2));
-    strcpy(q[quadlen].op,"goto");
-    char x[10];
-    sprintf(x,"%d",l_while);
-    char l[]="L";
-    strcpy(q[quadlen].res,strcat(l,x));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
-    quadlen++;
-    printf("L%d: \n",lnum++);
-    q[quadlen].op = (char*)malloc(sizeof(char)*6);
-    q[quadlen].arg1 = NULL;
-    q[quadlen].arg2 = NULL;
-    q[quadlen].res = (char*)malloc(sizeof(char)*(lnum+2));
-    strcpy(q[quadlen].op,"Label");
-    char x1[10];
-    sprintf(x1,"%d",lnum-1);
-    char l1[]="L";
-    strcpy(q[quadlen].res,strcat(l1,x1));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
-    quadlen++;
-}
 
 void for1()
 {
