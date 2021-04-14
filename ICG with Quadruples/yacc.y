@@ -95,7 +95,7 @@ quad q[100];
 		{
 			if(symbol_table[i].scope==scope && strcmp(symbol_table[i].name,name)==0)
 			{
-				//printf("warning - line %d : variable redeclared : %s\n",line,name);
+				//printf("\twarning - line %d : variable redeclared : %s\n",line,name);
                 symbol_table[i].line=line;
 				strcpy(symbol_table[i].value,value);
 				strcpy(symbol_table[i].type,type);
@@ -126,7 +126,7 @@ quad q[100];
         }
         if(!found)
         {
-            //printf("line %d : variable undeclared error : %s\n\nParsing failed\n",line,name);
+            //printf("\tline %d : variable undeclared error : %s\n\nParsing failed\n",line,name);
             //exit(0) ;
         }
     }
@@ -134,13 +134,13 @@ quad q[100];
     {
         if(table_index==0)
         {   
-            printf("\nSymbol table is empty\n");
+            printf("\t\nSymbol table is empty\n");
             return;
         }
-        printf("\n\t\t\tSYMBOL TABLE\n\nLine number \t ID name \t Value \t\t Type  \t\t Scope\n");
+        printf("\t-----------------------------------SYMBOL TABLE-----------------------------------\n\n\tLine number \t ID name \t Value \t\t Type  \t\t Scope\n");
 		for(int i=0;i<table_index;++i)
         {
-            printf("%d \t\t %s \t\t %s \t\t %s\t\t %d\n",symbol_table[i].line,symbol_table[i].name,symbol_table[i].value,symbol_table[i].type,symbol_table[i].scope);
+            printf("\t%d \t\t %s \t\t %s \t\t %s\t\t %d\n",symbol_table[i].line,symbol_table[i].name,symbol_table[i].value,symbol_table[i].type,symbol_table[i].scope);
         }
     }
     /*char* temporary_update(char* name, int scope)//checks if it exists and update
@@ -152,14 +152,14 @@ quad q[100];
             if(symbol_table[i].scope<=scope && strcmp(symbol_table[i].name,name)==0)
 			{
 				
-				//printf("temp nu: %s %d %s %s %s\n",temp,line,name, symbol_table[i].value, type);
+				//printf("\ttemp nu: %s %d %s %s %s\n",temp,line,name, symbol_table[i].value, type);
 				return symbol_table[i].value;
 			}
             ++i;
         }
         /*if(!found)
         {
-            printf("line %d : variable undeclared error : %s\n\nParsing failed\n",line,name);
+            printf("\tline %d : variable undeclared error : %s\n\nParsing failed\n",line,name);
             exit(0) ;
         }
     }*/
@@ -171,7 +171,7 @@ quad q[100];
 		{
 			if(symbol_table[i].scope==scope && strcmp(symbol_table[i].name,name)==0)
 			{
-				//printf("warning - line %d : variable redeclared : %s\n",line,name);
+				//printf("\twarning - line %d : variable redeclared : %s\n",line,name);
                 //symbol_table[i].line=line;
 				strcpy(symbol_table[i].value,value);
 				strcpy(symbol_table[i].type,type);
@@ -189,14 +189,14 @@ quad q[100];
      {
      	 int i=0;
 		int found=0;
-		//printf("hi");
+		//printf("\thi");
 		while(i<table_index && !found)
 		{
 			if(symbol_table[i].scope==scope && strcmp(symbol_table[i].name,name)==0)
 			{
-				//printf("warning - line %d : variable redeclared : %s\n",line,name);
+				//printf("\twarning - line %d : variable redeclared : %s\n",line,name);
                 //symbol_table[i].line=line;
-                //printf("%s",name);
+                //printf("\t%s",name);
 				strcpy(symbol_table[i].value,value);
 				strcpy(symbol_table[i].type,type);
 				found=1;
@@ -223,7 +223,12 @@ quad q[100];
 
 %%
 
-s:HEADER ID  T_semi vardefs OSCOPE start T_END;
+s:HEADER ID  T_semi vardefs OSCOPE start T_END
+ | error  {
+           
+            yyerrok;
+            yyclearin;
+            };
  ;
 
 vardefs: VAR  var_defs ;
@@ -362,19 +367,19 @@ int main(int argc, char *argv[])
 {
 	yyin = fopen(argv[1], "r");
 	FILE *filePointer;
-    printf("THREE ADDRESS CODE\n");
+    printf("\t---------------------THREE ADDRESS CODE---------------------\n\n");
 //FILE *filePointer= fopen("input.txt", "w"); 
 filePointer = fopen("input.txt", "w");
     if(!yyparse())
     {
 		print_table();
-        printf("\nParsing complete\n");
-         printf("---------------------Quadruples-------------------------\n\n");
-    printf("Operator \t Arg1 \t\t Arg2 \t\t Result \n");
+        printf("\t\nParsing complete\n");
+         printf("\t---------------------Quadruples-------------------------\n\n");
+    printf("\tOperator \t Arg1 \t\t Arg2 \t\t Result \n");
     int i;
     for(i=0;i<quadlen;i++)
     {
-        printf("%-8s \t %-8s \t %-8s \t %-6s \n",q[i].op,q[i].arg1,q[i].arg2,q[i].res);
+        printf("\t%-8s \t %-8s \t %-8s \t %-6s \n",q[i].op,q[i].arg1,q[i].arg2,q[i].res);
         if(q[i].arg1==NULL && q[i].arg2==NULL)
         {
         	fprintf(filePointer, "%s %s %s %s\n", q[i].op,"NULL","NULL",q[i].res);
@@ -396,7 +401,7 @@ filePointer = fopen("input.txt", "w");
   }
     
 	else
-		printf("\nParsing failed\n");
+		printf("\t\nParsing failed\n");
 	
 	fclose(yyin);
 	fclose(filePointer);
@@ -404,7 +409,7 @@ filePointer = fopen("input.txt", "w");
 }
          
 void yyerror(char *s) {
-	printf("line %d : %s %s\n", yylineno, s, yytext );
+	printf("\tline %d : %s %s\n", yylineno, s, yytext );
 }
 void push_lit(char* yy)
 {
@@ -413,16 +418,16 @@ void push_lit(char* yy)
 
 void push_sign()
 {
-//printf("%s\n",yytext);
+//printf("\t%s\n",yytext);
 strcpy(st[++top],yytext);
 }
 void codegen_assign()
 {
     /*for(int i=top;i>=0;i--)
     {
-    	printf("%s",st[i]);
+    	printf("\t%s",st[i]);
     }*/
-    printf("%s = %s\n",st[top-2],st[top]);
+    printf("\t%s = %s\n",st[top-2],st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
     q[quadlen].arg2 = NULL;
@@ -435,17 +440,17 @@ void codegen_assign()
 }
 void codegen_un()
 {
-    //printf("hi");
+    //printf("\thi");
     strcpy(temp,"T");
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
-    //printf("temporaries\n");
+    //printf("\ttemporaries\n");
     temp_add_update_node(temp, "-", "temp",scope);
      //void add_update_node(int line,char* name,char* value,char* type, int scope)
      //char st_t=st[top][0];
      char* add="1";
      char* st_op;
-     //printf("op%s",st[top]);
+     //printf("\top%s",st[top]);
      if(strcmp(st[top],"++")==0)
      {
      	st_op="+";
@@ -454,18 +459,18 @@ void codegen_un()
      {
      	st_op="-";
      }
-    printf("%s =  %s %s %s\n",temp,st[top-1],st_op,add);//creating temp=i+1
+    printf("\t%s =  %s %s %s\n",temp,st[top-1],st_op,add);//creating temp=i+1
     q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st_op));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top-1]));
     q[quadlen].arg2 = (char*)malloc(sizeof(char)*strlen(add));
     q[quadlen].res = (char*)malloc(sizeof(char)*strlen(temp));
-    //printf("%s",st[top-2]);
+    //printf("\t%s",st[top-2]);
     strcpy(q[quadlen].op,st_op);
     strcpy(q[quadlen].arg1,st[top-1]);
     strcpy(q[quadlen].arg2,add);
     strcpy(q[quadlen].res,temp);
     quadlen++;
-    printf("%s = %s\n", st[top-1],temp);
+    printf("\t%s = %s\n", st[top-1],temp);
      q[quadlen].op = (char*)malloc(sizeof(char)*strlen("="));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
     q[quadlen].arg2 = NULL;
@@ -477,13 +482,13 @@ void codegen_un()
     top-=2;
     strcpy(st[top],temp);
     temp_i++;
-    //printf("%s = %s\n", st[top-1],temp);
+    //printf("\t%s = %s\n", st[top-1],temp);
     
     
     /*q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st[top-1]));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top-2]));
     //char* value_1=temporary_update( q[quadlen].arg1,scope);
-    //printf("value 1: %s\n",value_1);
+    //printf("\tvalue 1: %s\n",value_1);
     q[quadlen].arg2 = (char*)malloc(sizeof(char)*strlen(st[top[0]]));
     q[quadlen].res = (char*)malloc(sizeof(char)*strlen(temp));
     
@@ -491,7 +496,7 @@ void codegen_un()
     strcpy(q[quadlen].arg1,st[top-2]);
     strcpy(q[quadlen].arg2,st[top]);
     strcpy(q[quadlen].res,temp);
-    //printf("temporaries");
+    //printf("\ttemporaries");
     quadlen++;
     top-=2;
     strcpy(st[top],temp);
@@ -503,14 +508,14 @@ void codegen()
     strcpy(temp,"T");
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
-    //printf("temporaries\n");
+    //printf("\ttemporaries\n");
     temp_add_update_node(temp, "-", "temp",scope);
      //void add_update_node(int line,char* name,char* value,char* type, int scope)
-    printf("%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
+    printf("\t%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st[top-1]));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top-2]));
     //char* value_1=temporary_update( q[quadlen].arg1,scope);
-    //printf("value 1: %s\n",value_1);
+    //printf("\tvalue 1: %s\n",value_1);
     q[quadlen].arg2 = (char*)malloc(sizeof(char)*strlen(st[top]));
     q[quadlen].res = (char*)malloc(sizeof(char)*strlen(temp));
     
@@ -518,7 +523,7 @@ void codegen()
     strcpy(q[quadlen].arg1,st[top-2]);
     strcpy(q[quadlen].arg2,st[top]);
     strcpy(q[quadlen].res,temp);
-    //printf("temporaries");
+    //printf("\ttemporaries");
     quadlen++;
     top-=2;
     strcpy(st[top],temp);
@@ -527,13 +532,13 @@ temp_i++;
 }
 /*void return_code()//for the if clause
 {
-	//printf("here");
+	//printf("\there");
  lnum++;
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
  temp_add_update_node(temp, "-", "temp",scope);
- printf("%s = not %s\n",temp,st[top]);
+ printf("\t%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
  q[quadlen].arg2 = NULL;
@@ -542,7 +547,7 @@ temp_i++;
  strcpy(q[quadlen].arg1,st[top]);
  strcpy(q[quadlen].res,temp);
  quadlen++;
- printf("if %s goto L%d\n",temp,lnum);
+ printf("\tif %s goto L%d\n",temp,lnum);
  q[quadlen].op = (char*)malloc(sizeof(char)*3);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
  q[quadlen].arg2 = NULL;
@@ -561,13 +566,13 @@ temp_i++;
 
 void if1()//for the if clause
 {
-	//printf("here");
+	//printf("\there");
  lnum++;
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
  temp_add_update_node(temp, "-", "temp",scope);
- printf("%s = not %s\n",temp,st[top]);
+ printf("\t%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
  q[quadlen].arg2 = NULL;
@@ -576,7 +581,7 @@ void if1()//for the if clause
  strcpy(q[quadlen].arg1,st[top]);
  strcpy(q[quadlen].res,temp);
  quadlen++;
- printf("if %s goto L%d\n",temp,lnum);
+ printf("\tif %s goto L%d\n",temp,lnum);
  q[quadlen].op = (char*)malloc(sizeof(char)*3);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
  q[quadlen].arg2 = NULL;
@@ -587,7 +592,7 @@ void if1()//for the if clause
  sprintf(x,"%d",lnum);
  char l[]="L";
  strcpy(q[quadlen].res,strcat(l,x));
- //printf("HI");
+ //printf("\tHI");
  label_add_update_node(q[quadlen].res, "-", "label",scope);
  quadlen++;
 
@@ -599,12 +604,12 @@ void if1()//for the if clause
 void if2()
 {
 int y=label[ltop--];
- printf("L%d: \n",y);
+ printf("\tL%d: \n",y);
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
  temp_add_update_node(temp, "-", "temp",scope);
- printf("%s = not %s\n",temp,st[top]);
+ printf("\t%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
  q[quadlen].arg2 = NULL;
@@ -613,7 +618,7 @@ int y=label[ltop--];
  strcpy(q[quadlen].arg1,st[top]);
  strcpy(q[quadlen].res,temp);
  quadlen++;
- printf("if %s goto L%d\n",temp,lnum);
+ printf("\tif %s goto L%d\n",temp,lnum);
  q[quadlen].op = (char*)malloc(sizeof(char)*3);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
  q[quadlen].arg2 = NULL;
@@ -624,7 +629,7 @@ int y=label[ltop--];
  sprintf(x,"%d",lnum);
  char l[]="L";
  strcpy(q[quadlen].res,strcat(l,x));
- //printf("HI");
+ //printf("\tHI");
  label_add_update_node(q[quadlen].res, "-", "label",scope);
  quadlen++;
 	
@@ -638,15 +643,15 @@ void codegen_assigna()//for  conditions
 	sprintf(tmp_i, "%d", temp_i);
 	strcat(temp,tmp_i);
 	temp_add_update_node(temp, "-", "temp",scope);
-	printf("%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
-	//printf("%d\n",strlen(st[top]));
+	printf("\t%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
+	//printf("\t%d\n",strlen(st[top]));
 	//if(strlen(st[top])==1)
 	if(1)
 	{
-		//printf("hello");
+		//printf("\thello");
 	
     	char t[20];
-		//printf("hello");
+		//printf("\thello");
 		strcpy(t,st[top-1]);
 		//strcat(t,st[top-1]);
 		q[quadlen].op = (char*)malloc(sizeof(char)*strlen(t));
@@ -681,7 +686,7 @@ void if3()//after if clause body
 {
     int y;
     y=label[ltop--];
-    printf("L%d: \n",y);
+    printf("\tL%d: \n",y);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -698,7 +703,7 @@ void if3()//after if clause body
 void for1()
 {
     l_for = lnum;
-    printf("L%d: \n",lnum++);
+    printf("\tL%d: \n",lnum++);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -717,7 +722,7 @@ void for2()
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
     temp_add_update_node(temp, "-", "temp",scope);
-    printf("%s = not %s\n",temp,st[top]);
+    printf("\t%s = not %s\n",temp,st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*4);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
     q[quadlen].arg2 = NULL;
@@ -726,9 +731,9 @@ void for2()
     strcpy(q[quadlen].arg1,st[top]);
     strcpy(q[quadlen].res,temp);
     quadlen++;
-    //printf("hi");
-    printf("if %s goto L%d\n",temp,lnum);
-    //printf("hi");
+    //printf("\thi");
+    printf("\tif %s goto L%d\n",temp,lnum);
+    //printf("\thi");
     q[quadlen].op = (char*)malloc(sizeof(char)*2);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
     q[quadlen].arg2 = NULL;
@@ -745,7 +750,7 @@ void for2()
     label[++ltop]=lnum;
     sprintf(label_node, "%d", lnum);
     lnum++;
-    printf("goto L%d\n",lnum);
+    printf("\tgoto L%d\n",lnum);
     q[quadlen].op = (char*)malloc(sizeof(char)*5);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -758,7 +763,7 @@ void for2()
     quadlen++;
     label[++ltop]=lnum;
     sprintf(label_node, "%d", lnum);
-    printf("L%d: \n",++lnum);
+    printf("\tL%d: \n",++lnum);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -776,7 +781,7 @@ void for3()
 {
     int x;
     x=label[ltop--];
-    printf("goto L%d \n",l_for);
+    printf("\tgoto L%d \n",l_for);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*5);
     q[quadlen].arg1 = NULL;
@@ -789,7 +794,7 @@ void for3()
     strcpy(q[quadlen].res,strcat(l,jug));
     quadlen++;
 
-    printf("L%d: \n",x);
+    printf("\tL%d: \n",x);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
@@ -809,7 +814,7 @@ void for4()
 {
     int x;
     x=label[ltop--];
-    printf("goto L%d \n",lnum);
+    printf("\tgoto L%d \n",lnum);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*5);
     q[quadlen].arg1 = NULL;
@@ -823,7 +828,7 @@ void for4()
      label_add_update_node(q[quadlen].res, "-", "label",scope);
     quadlen++;
 
-    printf("L%d: \n",x);
+    printf("\tL%d: \n",x);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
