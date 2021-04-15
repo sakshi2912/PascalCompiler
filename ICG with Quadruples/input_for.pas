@@ -22,7 +22,9 @@ else
  gtr:=9;
 
 
-for x:=10 to 20 do
-    gtr:= gtr+1;
-
+while( x<10 ) do
+begin
+x:=10;
+m:=10+20;
+end;
 end.

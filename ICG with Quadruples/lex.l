@@ -33,6 +33,7 @@ number	{digits}{opFraction}{opExponent}
 "bool" {strcpy(type, yytext);return BOOL;}
 "do" return DO;
 "for" return FOR;
+"while" return WHILE;
 "to" return TO;
 "downto" return DOWN_TO;
 "if" return IF;
@@ -42,7 +43,7 @@ number	{digits}{opFraction}{opExponent}
 "return" return T_RETURN;
 "begin" {scope++; return OSCOPE;}
 "end" {scope--;return CSCOPE;}
-"end." {return T_END;}
+"end." {scope--;return T_END;}
 {number} {strcpy(value, yytext);return NUM;}
 {alpha}({alpha}|{digit})* { yylval = strdup(yytext);strcpy(name, yytext);return ID;}
 
