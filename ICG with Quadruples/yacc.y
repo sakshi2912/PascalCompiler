@@ -217,14 +217,14 @@ quad q[100];
 
 %token HEADER VAR MAIN TO DOWN_TO THEN
 %token T_lt T_gt T_lteq T_gteq T_neq T_eqeq T_pl T_min T_mul T_div T_and T_or T_incr T_decr T_not T_eq T_assign T_comma T_semi T_dot T_END WHILE
-%token INT CHAR FLOAT DOUBLE VOID BOOL COUT COUTSTR INS CIN XTR
+%token INT CHAR FLOAT DOUBLE VOID BOOL COUT COUTSTR INS CIN XTR 
 %token IF ELSE DO FOR ELSE_IF T_RETURN
 %token ID NUM SINGLE_CHAR_VALUE
 %token OPB CLB OSCOPE CSCOPE
 
 %%
 
-s:HEADER ID  T_semi vardefs OSCOPE start CSCOPE T_dot
+s:HEADER ID  T_semi vardefs OSCOPE start T_END
  | error  {
            
             yyerrok;
@@ -243,7 +243,7 @@ start:c
      ;
 
 c:c stmt T_semi
- |c loops
+ |c loops 
  |empty
  ;
 
@@ -274,25 +274,23 @@ expression:lit
           |un_boolop expression 
           ;
 
-loops:WHILE {while1();} INS cond_stmt XTR {while2();} DO loopbody {while3()} 
-      FOR  cond_stmt_for { for1();} TO cond_stmt_for{for3();} DO loopbody{for4();}
+loops:WHILE {while1();} INS cond_stmt XTR {while2();} DO loopbody {while3();} 
+      |FOR  cond_stmt_for { for1();} TO cond_stmt_for{for3();} DO loopbody{for4();}
      |FOR  cond_stmt_for { for1();} DOWN_TO cond_stmt_for{for3();} DO loopbody{for4();}
 
-     | IF INS cond_stmt XTR THEN {if1();}  loopbody z{if3();
+     | IF INS cond_stmt XTR THEN {if1();}  loopbody z{if3();}
      | empty
 
      ;
 
 z:ELSE_IF INS cond_stmt XTR {if2();} THEN loopbody x
- |empty
  ;
 
 x:ELSE_IF INS cond_stmt XTR {if2();} THEN loopbody x
  |ELSE loopbody
- |empty
  ;
 
-loopbody:OSCOPE c CSCOPE  T_semi
+loopbody: OSCOPE c CSCOPE 
   	    |stmt T_semi
   	    ;
 
@@ -571,7 +569,7 @@ void while1()
 {
 
     l_while = lnum;
-    printf("L%d: \n",lnum++);
+    printf("\tL%d : \n",lnum++);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -591,7 +589,7 @@ void while2()
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
  temp_add_update_node(temp, "-", "temporary",scope);
- printf("%s = not %s\n",temp,st[top]);
+ printf("\t%s = not %s\n",temp,st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*4);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
     q[quadlen].arg2 = NULL;
@@ -600,7 +598,7 @@ void while2()
     strcpy(q[quadlen].arg1,st[top]);
     strcpy(q[quadlen].res,temp);
     quadlen++;
-    printf("if %s goto L%d\n",temp,lnum);
+    printf("\tif %s goto L%d\n",temp,lnum);
     q[quadlen].op = (char*)malloc(sizeof(char)*3);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(temp));
     q[quadlen].arg2 = NULL;
@@ -619,7 +617,7 @@ void while2()
 void while3()
 {
 
-printf("goto L%d \n",l_while);
+printf("\tgoto L%d \n",l_while);
 q[quadlen].op = (char*)malloc(sizeof(char)*5);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -631,7 +629,7 @@ q[quadlen].op = (char*)malloc(sizeof(char)*5);
     strcpy(q[quadlen].res,strcat(l,x));
      label_add_update_node(q[quadlen].res, "-", "label",scope);
     quadlen++;
-    printf("L%d: \n",lnum++);
+    printf("\tL%d : \n",lnum++);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -686,7 +684,7 @@ void if1()//for the if clause
 void if2()
 {
 int y=label[ltop--];
- printf("\tL%d: \n",y);
+ printf("\tL%d : \n",y);
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
@@ -768,7 +766,7 @@ void if3()//after if clause body
 {
     int y;
     y=label[ltop--];
-    printf("\tL%d: \n",y);
+    printf("\tL%d : \n",y);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -785,7 +783,7 @@ void if3()//after if clause body
 void for1()
 {
     l_for = lnum;
-    printf("\tL%d: \n",lnum++);
+    printf("\tL%d : \n",lnum++);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -845,7 +843,7 @@ void for2()
     quadlen++;
     label[++ltop]=lnum;
     sprintf(label_node, "%d", lnum);
-    printf("\tL%d: \n",++lnum);
+    printf("\tL%d : \n",++lnum);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
     q[quadlen].arg2 = NULL;
@@ -876,7 +874,7 @@ void for3()
     strcpy(q[quadlen].res,strcat(l,jug));
     quadlen++;
 
-    printf("\tL%d: \n",x);
+    printf("\tL%d : \n",x);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;
@@ -910,7 +908,7 @@ void for4()
      label_add_update_node(q[quadlen].res, "-", "label",scope);
     quadlen++;
 
-    printf("\tL%d: \n",x);
+    printf("\tL%d : \n",x);
 
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
     q[quadlen].arg1 = NULL;

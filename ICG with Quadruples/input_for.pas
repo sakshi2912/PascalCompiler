@@ -11,6 +11,8 @@ b: integer;
 begin
 b:=1;
 
+
+while (x>=y) do begin b:=x+2; end
 if ( x<y ) then
 
    gtr := 33;
@@ -18,13 +20,6 @@ if ( x<y ) then
 else if ( a==20 ) then
    gtr := 444;
 
-else 
- gtr:=9;
+else begin x:=10; y:=20; end
 
-
-while( x<10 ) do
-begin
-x:=10;
-m:=10+20;
-end;
 end.
