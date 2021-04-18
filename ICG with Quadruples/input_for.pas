@@ -7,19 +7,28 @@ y: integer;
 gtr: integer;
 z: real; 
 b: integer;
-
+c: integer;
 begin
 b:=1;
 
+x:=10;
 
-while (x>=y) do begin b:=x+2; end
+
+while (x<y) do begin 
+	x:= b+4;
+	c:=20*20;
+end
+
+while (x>=y) do begin b:=x+2;gtr:=gtr+x; end
 if ( x<y ) then
-
-   gtr := 33;
-
-else if ( a==20 ) then
+begin
+   c:=300;
+   gtr := 33+c;
+   x++;
+end
+else if ( x==20 ) then
    gtr := 444;
 
-else begin x:=10; y:=20; end
+else begin b++; y:=20; end
 
 end.

@@ -93,19 +93,26 @@ print("\n")
 print("After dead code elimination - ")
 print("------------------------------")
 for i in constantFoldedList:
-    if(i[0]=="="):
-        pass
-    elif(i[0] in ["+","-","*","/","==","<=","<",">",">="]):
-        print(i[3],"=",i[1],i[0],i[2])
-    elif(i[0] in ["if","goto","label","not"]):
-        if(i[0]=="if"):
-            print(i[0],i[1],"goto",i[3])
+    with open("deadcode.txt","w") as f:
+        if(i[0]=="="):
+            pass
+        elif(i[0] in ["+","-","*","/","==","<=","<",">",">="]):
+            print(i[3],"=",i[1],i[0],i[2])
+            f.write(str(i[3])+"="+str(i[1])+str(i[0])+str(i[2]))
+        elif(i[0] in ["if","goto","label","not"]):
+            if(i[0]=="if"):
+                print(i[0],i[1],"goto",i[3])
+                f.write(str(i[0])+str(i[1])+"goto"+str(i[3]))
         if(i[0]=="goto"):
             print(i[0],i[3])
+            f.write(str(i[0])+str(i[3]))
         if(i[0]=="label"):
             print(i[3],":")
+            f.write(str(i[3])+":")
         if(i[0]=="not"):
             print(i[3],"=",i[0],i[1])
+            f.write(str(i[3])+"="+str(i[0])+str(i[1]))
+
 def existslabel(lines, i):
 
     if(i == 0):
@@ -654,7 +661,7 @@ print()
 lines, loopblock = loopMotion(lines)
 for i in lines:
     print(i)
-print(loopblock)
+
 
                
 

@@ -1,21 +1,40 @@
 b = 1
+x = 10
 L0 : 
-T0 = x >= y
+T0 = x < y
 T1 = not T0
 if T1 goto L1
-T2 = x + 2
-b = T2
+T2 = b + 4
+x = T2
+T3 = 20 * 20
+c = T3
 goto L0 
 L1 : 
-T3 = x < y
-T4 = not T3
-if T4 goto L3
-gtr = 33
-T5 = a == 20
+L2 : 
+T4 = x >= y
+T5 = not T4
+if T5 goto L3
+T6 = x + 2
+b = T6
+T7 = gtr + x
+gtr = T7
+goto L2 
 L3 : 
-T6 = not T5
-if T6 goto L3
+T8 = x < y
+T9 = not T8
+if T9 goto L5
+c = 300
+T10 = 33 + c
+gtr = T10
+T11 =  x + 1
+x = T11
+T12 = x == 20
+L5 : 
+T13 = not T12
+if T13 goto L5
 gtr = 444
-x = 10
+T14 =  b + 1
+b = T14
 y = 20
-L3 : 
+L5 : 
+
