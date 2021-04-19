@@ -274,10 +274,7 @@ def checkArray(token, lines, i):
         return [newptr, sub]
 
     else:
-
         return
-
-
 
 def additem(newlist, out):
 

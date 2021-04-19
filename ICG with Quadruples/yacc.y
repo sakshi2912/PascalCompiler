@@ -42,16 +42,16 @@ quad q[100];
     extern char type[100];
     extern char value[100];
 
-    void make_node(int line, char* name, char* value, char* type, int scope);
-	void add_update_node(int line,char* name,char* value,char* type, int scope);
+    void createNode(int line, char* name, char* value, char* type, int scope);
+	void AddUpdateNode(int line,char* name,char* value,char* type, int scope);
     void update(int line,char* name,char* value,char* type, int scope);
-	void print_table();
-	void push_sign();
-	void push_lit(char* yy);
-	void codegen_assign();
+	void printTable();
+	void pushSignop();
+	void pushVal(char* yy);
+	void assignmentCodegen();
 	void codegen();
-	void codegen_assigna();
-	void codegen_un();
+	void assignmentCodegena();
+	void unaryCodegen();
 	void if1();
 	void if2();
 	void if3();
@@ -59,7 +59,7 @@ quad q[100];
 	void while2();
 	void while3();
 	
-    void make_node(int line, char* name, char* value, char* type, int scope)
+    void createNode(int line, char* name, char* value, char* type, int scope)
     {
         symbol_table[table_index].name=(char*)malloc(sizeof(char)*strlen(name));
         symbol_table[table_index].value=(char*)malloc(sizeof(char)*strlen(value));
@@ -85,7 +85,7 @@ quad q[100];
         //symbol_table[table_index].line=line;
 
     }
-    void add_update_node(int line,char* name,char* value,char* type, int scope)
+    void AddUpdateNode(int line,char* name,char* value,char* type, int scope)
     {
         int i=0;
 		int found=0;
@@ -103,7 +103,7 @@ quad q[100];
 		}
 		if(!found)
 		{
-			make_node(line,name,value,type,scope);
+			createNode(line,name,value,type,scope);
             ++table_index;
 		}
     }
@@ -128,7 +128,7 @@ quad q[100];
             //exit(0) ;
         }
     }
-    void print_table()
+    void printTable()
     {
         if(table_index==0)
         {   
@@ -141,27 +141,8 @@ quad q[100];
             printf("\t%d \t\t %s \t\t %s \t\t %s\t\t %d\n",symbol_table[i].line,symbol_table[i].name,symbol_table[i].value,symbol_table[i].type,symbol_table[i].scope);
         }
     }
-    /*char* temporary_update(char* name, int scope)//checks if it exists and update
-    {
-        int i=0;
-		int found=0;
-		while(i<table_index && !found)
-		{
-            if(symbol_table[i].scope<=scope && strcmp(symbol_table[i].name,name)==0)
-			{
-				
-				//printf("\ttemp nu: %s %d %s %s %s\n",temp,line,name, symbol_table[i].value, type);
-				return symbol_table[i].value;
-			}
-            ++i;
-        }
-        /*if(!found)
-        {
-            printf("\tline %d : variable undeclared error : %s\n\nParsing failed\n",line,name);
-            exit(0) ;
-        }
-    }*/
-     void temp_add_update_node(char* name,char* value,char* type, int scope)
+    
+     void temp_AddUpdateNode(char* name,char* value,char* type, int scope)
     {
         int i=0;
 		int found=0;
@@ -183,7 +164,7 @@ quad q[100];
             ++table_index;
 		}
     }
-     void label_add_update_node(char* name, char* value, char* type, int scope)
+     void label_AddUpdateNode(char* name, char* value, char* type, int scope)
      {
      	 int i=0;
 		int found=0;
@@ -232,7 +213,7 @@ s:HEADER ID  T_semi vardefs OSCOPE start T_END
 vardefs: VAR  var_defs ;
 
 var_defs: var_defs ID ':' TYPE  T_semi{
-              add_update_node(yylineno,name,"",type,scope);
+              AddUpdateNode(yylineno,name,"",type,scope);
           };
           | empty;
           
@@ -253,25 +234,31 @@ stmt:assignment
     |read_ip
     ;
 
-assignment:ID {push_lit(yylval);} T_assign {push_sign();} expression
+assignment:ID {pushVal(yylval);} T_assign {pushSignop();} expression
           {
-              codegen_assign();
+              assignmentCodegen();
               check_update(yylineno,name,value,type,scope);
           }
+          |
+          error  {
+           
+            yyerrok;
+            yyclearin;
+            }
 
           ;
 
 
 expression:lit {$$=$1;}
-          |lit bin_arop {push_sign();}expression {codegen();}
+          |lit bin_arop {pushSignop();}expression {codegen();}
           |lit bin_boolop expression
-          |lit un_arop {push_sign();codegen_un();}
+          |lit un_arop {pushSignop();unaryCodegen();}
           |un_arop expression
           |un_boolop expression 
           ;
 
 loops:WHILE {while1();} INS cond_stmt XTR {while2();} DO loopbody {while3();} 
-     | IF INS cond_stmt XTR THEN {if1();}  loopbody z{if3();}
+     |IF INS cond_stmt XTR THEN {if1();}  loopbody z{if3();}
      | empty
 
      ;
@@ -298,7 +285,7 @@ cond_stmt_for:stmt
              |empty
              ;
 
-cond:lit relop lit {codegen_assigna();}
+cond:lit relop lit {assignmentCodegena();}
     |lit relop lit bin_boolop lit relop lit
     |un_boolop INS lit relop lit XTR
     |un_boolop lit relop lit
@@ -311,8 +298,8 @@ print:COUT INS COUTSTR XTR  T_semi
 read_ip:CIN INS ID XTR  T_semi
        ;
 
-lit:ID {push_lit(yylval);}
-   |NUM {push_lit(value);}
+lit:ID {pushVal(yylval);}
+   |NUM {pushVal(value);}
    ;
 
 TYPE:INT
@@ -339,12 +326,12 @@ un_arop:T_incr
 un_boolop:T_not
          ;
 
-relop:T_lt {push_sign();}
-     |T_gt {push_sign();}
-     |T_lteq {push_sign();}
-     |T_gteq {push_sign();}
-     |T_neq {push_sign();}
-     |T_eqeq {push_sign();}
+relop:T_lt {pushSignop();}
+     |T_gt {pushSignop();}
+     |T_lteq {pushSignop();}
+     |T_gteq {pushSignop();}
+     |T_neq {pushSignop();}
+     |T_eqeq {pushSignop();}
      ;
 
 %%
@@ -366,7 +353,7 @@ int main(int argc, char *argv[])
 filePointer = fopen("input.txt", "w");
     if(!yyparse())
     {
-		print_table();
+		printTable();
         printf("\n\n\tParsing complete\n\n\n");
          printf("\t---------------------Quadruples-------------------------\n\n");
     printf("\n\tOperator \t Arg1 \t\t Arg2 \t\t Result \n");
@@ -405,17 +392,17 @@ filePointer = fopen("input.txt", "w");
 void yyerror(char *s) {
 	printf("\tline %d : %s %s\n", yylineno, s, yytext );
 }
-void push_lit(char* yy)
+void pushVal(char* yy)
 {
 	strcpy(st[++top],yy);
 }
 
-void push_sign()
+void pushSignop()
 {
 //printf("\t%s\n",yytext);
 strcpy(st[++top],yytext);
 }
-void codegen_assign()   // for assignment operations
+void assignmentCodegen()   // for assignment operations
 {
     /*for(int i=top;i>=0;i--)
     {
@@ -432,15 +419,15 @@ void codegen_assign()   // for assignment operations
     quadlen++;
     top=-1;
 }
-void codegen_un()  //unary and temps
+void unaryCodegen()  //unary and temps
 {
     //printf("\thi");
     strcpy(temp,"T");
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
     //printf("\ttemporaries\n");
-    temp_add_update_node(temp, "-", "temp",scope);
-     //void add_update_node(int line,char* name,char* value,char* type, int scope)
+    temp_AddUpdateNode(temp, "-", "temp",scope);
+     //void AddUpdateNode(int line,char* name,char* value,char* type, int scope)
      //char st_t=st[top][0];
      char* add="1";
      char* st_op;
@@ -476,26 +463,7 @@ void codegen_un()  //unary and temps
     top-=2;
     strcpy(st[top],temp);
     temp_i++;
-    //printf("\t%s = %s\n", st[top-1],temp);
-    
-    
-    /*q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st[top-1]));
-    q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top-2]));
-    //char* value_1=temporary_update( q[quadlen].arg1,scope);
-    //printf("\tvalue 1: %s\n",value_1);
-    q[quadlen].arg2 = (char*)malloc(sizeof(char)*strlen(st[top[0]]));
-    q[quadlen].res = (char*)malloc(sizeof(char)*strlen(temp));
-    
-    strcpy(q[quadlen].op,st[top-1]);
-    strcpy(q[quadlen].arg1,st[top-2]);
-    strcpy(q[quadlen].arg2,st[top]);
-    strcpy(q[quadlen].res,temp);
-    //printf("\ttemporaries");
-    quadlen++;
-    top-=2;
-    strcpy(st[top],temp);
 
-temp_i++;*/
 }
 void codegen()
 {
@@ -503,8 +471,8 @@ void codegen()
     sprintf(tmp_i, "%d", temp_i);
     strcat(temp,tmp_i);
     //printf("\ttemporaries\n");
-    temp_add_update_node(temp, "-", "temp",scope);
-     //void add_update_node(int line,char* name,char* value,char* type, int scope)
+    temp_AddUpdateNode(temp, "-", "temp",scope);
+     //void AddUpdateNode(int line,char* name,char* value,char* type, int scope)
     printf("\t%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*strlen(st[top-1]));
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top-2]));
@@ -538,7 +506,7 @@ void while1() //Label first because while gets degenerated to if, and it needs t
     sprintf(x,"%d",lnum-1);
     char l[]="L";
     strcpy(q[quadlen].res,strcat(l,x));
-    label_add_update_node(q[quadlen].res, "-", "label",scope);
+    label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
     quadlen++;
 }
 
@@ -547,7 +515,7 @@ void while2() // condition
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temporary",scope);
+ temp_AddUpdateNode(temp, "-", "temporary",scope);
  printf("\t%s = not %s\n",temp,st[top]);
     q[quadlen].op = (char*)malloc(sizeof(char)*4);
     q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -567,7 +535,7 @@ void while2() // condition
     char x[10];
     sprintf(x,"%d",lnum);char l[]="L";
     strcpy(q[quadlen].res,strcat(l,x));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
+     label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
     quadlen++;
 
  temp_i++;
@@ -586,7 +554,7 @@ q[quadlen].op = (char*)malloc(sizeof(char)*5);
     sprintf(x,"%d",l_while);
     char l[]="L";
     strcpy(q[quadlen].res,strcat(l,x));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
+     label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
     quadlen++;
     printf("\tL%d : \n",lnum++);
     q[quadlen].op = (char*)malloc(sizeof(char)*6);
@@ -598,7 +566,7 @@ q[quadlen].op = (char*)malloc(sizeof(char)*5);
     sprintf(x1,"%d",lnum-1);
     char l1[]="L";
     strcpy(q[quadlen].res,strcat(l1,x1));
-     label_add_update_node(q[quadlen].res, "-", "label",scope);
+     label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
     quadlen++;
 }
 
@@ -610,7 +578,7 @@ void if1()//for the if clause
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temp",scope);
+ temp_AddUpdateNode(temp, "-", "temp",scope);
  printf("\t%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -632,7 +600,7 @@ void if1()//for the if clause
  char l[]="L";
  strcpy(q[quadlen].res,strcat(l,x));
  //printf("\tHI");
- label_add_update_node(q[quadlen].res, "-", "label",scope);
+ label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
  quadlen++;
 
  temp_i++;
@@ -647,7 +615,7 @@ int y=label[ltop--];
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
  strcat(temp,tmp_i);
- temp_add_update_node(temp, "-", "temp",scope);
+ temp_AddUpdateNode(temp, "-", "temp",scope);
  printf("\t%s = not %s\n",temp,st[top]);
  q[quadlen].op = (char*)malloc(sizeof(char)*4);
  q[quadlen].arg1 = (char*)malloc(sizeof(char)*strlen(st[top]));
@@ -669,19 +637,19 @@ int y=label[ltop--];
  char l[]="L";
  strcpy(q[quadlen].res,strcat(l,x));
  //printf("\tHI");
- label_add_update_node(q[quadlen].res, "-", "label",scope);
+ label_AddUpdateNode(q[quadlen].res, "-", "label",scope);
  quadlen++;
 	
  temp_i++;
  label[++ltop]=lnum;
 }
 
-void codegen_assigna()//for  conditions
+void assignmentCodegena()//for  conditions
 {
 	strcpy(temp,"T");
 	sprintf(tmp_i, "%d", temp_i);
 	strcat(temp,tmp_i);
-	temp_add_update_node(temp, "-", "temp",scope);
+	temp_AddUpdateNode(temp, "-", "temp",scope);
 	printf("\t%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
 	//printf("\t%d\n",strlen(st[top]));
 	//if(strlen(st[top])==1)

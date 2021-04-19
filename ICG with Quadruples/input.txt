@@ -1,5 +1,6 @@
-= 1 NULL b
+= 100.0 NULL b
 = 10 NULL x
+= 1000 NULL s
 Label NULL NULL L0
 < x y T0
 not T0 NULL T1
