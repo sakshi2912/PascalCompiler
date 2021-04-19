@@ -86,7 +86,7 @@ int l_while=0;
 int l_for=0;
 
 
-typedef struct node
+typedef struct node   //symbol table 2D arr
 {
 	int line;
     int scope;
@@ -94,7 +94,7 @@ typedef struct node
 	char* value;
 	char* type; 
 } node;
-typedef struct quadruples
+typedef struct quadruples //2D arr
 {
     char *op;
     char *arg1;
@@ -128,10 +128,7 @@ quad q[100];
 	void while1();
 	void while2();
 	void while3();
-	void for1();
-	void for2();
-	void for3();
-	void for4();
+	
     void make_node(int line, char* name, char* value, char* type, int scope)
     {
         symbol_table[table_index].name=(char*)malloc(sizeof(char)*strlen(name));
@@ -284,7 +281,7 @@ quad q[100];
 
 
 
-#line 288 "y.tab.c"
+#line 285 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -931,13 +928,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   227,   227,   228,   235,   237,   240,   242,   245,   246,
-     247,   250,   253,   254,   255,   256,   259,   259,   259,   268,
-     269,   269,   270,   271,   272,   273,   276,   276,   276,   277,
-     277,   278,   282,   282,   285,   285,   286,   289,   290,   295,
-     296,   304,   305,   306,   307,   308,   311,   314,   317,   318,
-     321,   322,   323,   324,   325,   328,   329,   330,   331,   334,
-     335,   338,   339,   342,   345,   346,   347,   348,   349,   350
+       0,   224,   224,   225,   232,   234,   237,   239,   242,   243,
+     244,   247,   250,   251,   252,   253,   256,   256,   256,   265,
+     266,   266,   267,   268,   269,   270,   273,   273,   273,   274,
+     274,   275,   279,   279,   282,   282,   283,   286,   287,   292,
+     293,   301,   302,   303,   304,   305,   308,   311,   314,   315,
+     318,   319,   320,   321,   322,   325,   326,   327,   328,   331,
+     332,   335,   336,   339,   342,   343,   344,   345,   346,   347
 };
 #endif
 
@@ -1615,172 +1612,172 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* s: error  */
-#line 228 "yacc.y"
+#line 225 "yacc.y"
           {
            
             yyerrok;
             yyclearin;
             }
-#line 1625 "y.tab.c"
+#line 1622 "y.tab.c"
     break;
 
   case 5: /* var_defs: var_defs ID ':' TYPE T_semi  */
-#line 237 "yacc.y"
+#line 234 "yacc.y"
                                       {
               add_update_node(yylineno,name,"",type,scope);
           }
-#line 1633 "y.tab.c"
+#line 1630 "y.tab.c"
     break;
 
   case 13: /* stmt: expression  */
-#line 254 "yacc.y"
+#line 251 "yacc.y"
                 {yyval=yyvsp[0];}
-#line 1639 "y.tab.c"
+#line 1636 "y.tab.c"
     break;
 
   case 16: /* $@1: %empty  */
-#line 259 "yacc.y"
+#line 256 "yacc.y"
               {push_lit(yylval);}
-#line 1645 "y.tab.c"
+#line 1642 "y.tab.c"
     break;
 
   case 17: /* $@2: %empty  */
-#line 259 "yacc.y"
+#line 256 "yacc.y"
                                            {push_sign();}
-#line 1651 "y.tab.c"
+#line 1648 "y.tab.c"
     break;
 
   case 18: /* assignment: ID $@1 T_assign $@2 expression  */
-#line 260 "yacc.y"
+#line 257 "yacc.y"
           {
               codegen_assign();
               check_update(yylineno,name,value,type,scope);
           }
-#line 1660 "y.tab.c"
+#line 1657 "y.tab.c"
     break;
 
   case 19: /* expression: lit  */
-#line 268 "yacc.y"
+#line 265 "yacc.y"
                {yyval=yyvsp[0];}
-#line 1666 "y.tab.c"
+#line 1663 "y.tab.c"
     break;
 
   case 20: /* $@3: %empty  */
-#line 269 "yacc.y"
+#line 266 "yacc.y"
                         {push_sign();}
-#line 1672 "y.tab.c"
+#line 1669 "y.tab.c"
     break;
 
   case 21: /* expression: lit bin_arop $@3 expression  */
-#line 269 "yacc.y"
+#line 266 "yacc.y"
                                                  {codegen();}
-#line 1678 "y.tab.c"
+#line 1675 "y.tab.c"
     break;
 
   case 23: /* expression: lit un_arop  */
-#line 271 "yacc.y"
+#line 268 "yacc.y"
                        {push_sign();codegen_un();}
-#line 1684 "y.tab.c"
+#line 1681 "y.tab.c"
     break;
 
   case 26: /* $@4: %empty  */
-#line 276 "yacc.y"
+#line 273 "yacc.y"
             {while1();}
-#line 1690 "y.tab.c"
+#line 1687 "y.tab.c"
     break;
 
   case 27: /* $@5: %empty  */
-#line 276 "yacc.y"
+#line 273 "yacc.y"
                                           {while2();}
-#line 1696 "y.tab.c"
+#line 1693 "y.tab.c"
     break;
 
   case 28: /* loops: WHILE $@4 INS cond_stmt XTR $@5 DO loopbody  */
-#line 276 "yacc.y"
+#line 273 "yacc.y"
                                                                   {while3();}
-#line 1702 "y.tab.c"
+#line 1699 "y.tab.c"
     break;
 
   case 29: /* $@6: %empty  */
-#line 277 "yacc.y"
+#line 274 "yacc.y"
                                  {if1();}
-#line 1708 "y.tab.c"
+#line 1705 "y.tab.c"
     break;
 
   case 30: /* loops: IF INS cond_stmt XTR THEN $@6 loopbody z  */
-#line 277 "yacc.y"
+#line 274 "yacc.y"
                                                      {if3();}
-#line 1714 "y.tab.c"
+#line 1711 "y.tab.c"
     break;
 
   case 32: /* $@7: %empty  */
-#line 282 "yacc.y"
+#line 279 "yacc.y"
                             {if2();}
-#line 1720 "y.tab.c"
+#line 1717 "y.tab.c"
     break;
 
   case 34: /* $@8: %empty  */
-#line 285 "yacc.y"
+#line 282 "yacc.y"
                             {if2();}
-#line 1726 "y.tab.c"
+#line 1723 "y.tab.c"
     break;
 
   case 41: /* cond: lit relop lit  */
-#line 304 "yacc.y"
+#line 301 "yacc.y"
                    {codegen_assigna();}
-#line 1732 "y.tab.c"
+#line 1729 "y.tab.c"
     break;
 
   case 48: /* lit: ID  */
-#line 317 "yacc.y"
+#line 314 "yacc.y"
        {push_lit(yylval);}
-#line 1738 "y.tab.c"
+#line 1735 "y.tab.c"
     break;
 
   case 49: /* lit: NUM  */
-#line 318 "yacc.y"
+#line 315 "yacc.y"
         {push_lit(value);}
-#line 1744 "y.tab.c"
+#line 1741 "y.tab.c"
     break;
 
   case 64: /* relop: T_lt  */
-#line 345 "yacc.y"
+#line 342 "yacc.y"
            {push_sign();}
-#line 1750 "y.tab.c"
+#line 1747 "y.tab.c"
     break;
 
   case 65: /* relop: T_gt  */
-#line 346 "yacc.y"
+#line 343 "yacc.y"
            {push_sign();}
-#line 1756 "y.tab.c"
+#line 1753 "y.tab.c"
     break;
 
   case 66: /* relop: T_lteq  */
-#line 347 "yacc.y"
+#line 344 "yacc.y"
              {push_sign();}
-#line 1762 "y.tab.c"
+#line 1759 "y.tab.c"
     break;
 
   case 67: /* relop: T_gteq  */
-#line 348 "yacc.y"
+#line 345 "yacc.y"
              {push_sign();}
-#line 1768 "y.tab.c"
+#line 1765 "y.tab.c"
     break;
 
   case 68: /* relop: T_neq  */
-#line 349 "yacc.y"
+#line 346 "yacc.y"
             {push_sign();}
-#line 1774 "y.tab.c"
+#line 1771 "y.tab.c"
     break;
 
   case 69: /* relop: T_eqeq  */
-#line 350 "yacc.y"
+#line 347 "yacc.y"
              {push_sign();}
-#line 1780 "y.tab.c"
+#line 1777 "y.tab.c"
     break;
 
 
-#line 1784 "y.tab.c"
+#line 1781 "y.tab.c"
 
       default: break;
     }
@@ -1974,7 +1971,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 353 "yacc.y"
+#line 350 "yacc.y"
 
 #include <stdio.h>
 #include <string.h>
@@ -2043,7 +2040,7 @@ void push_sign()
 //printf("\t%s\n",yytext);
 strcpy(st[++top],yytext);
 }
-void codegen_assign()
+void codegen_assign()   // for assignment operations
 {
     /*for(int i=top;i>=0;i--)
     {
@@ -2060,7 +2057,7 @@ void codegen_assign()
     quadlen++;
     top=-1;
 }
-void codegen_un()
+void codegen_un()  //unary and temps
 {
     //printf("\thi");
     strcpy(temp,"T");
@@ -2152,7 +2149,7 @@ void codegen()
 
 temp_i++;
 }
-void while1()
+void while1() //Label first because while gets degenerated to if, and it needs to evaluate the label before the body  (multiplechecks)
 {
 
     l_while = lnum;
@@ -2170,7 +2167,7 @@ void while1()
     quadlen++;
 }
 
-void while2()
+void while2() // condition
 {
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
@@ -2201,7 +2198,7 @@ void while2()
  temp_i++;
  }
 
-void while3()
+void while3() // inside the label
 {
 
 printf("\tgoto L%d \n",l_while);

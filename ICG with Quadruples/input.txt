@@ -31,8 +31,10 @@ if T9 NULL L5
 == x 20 T12
 not T12 NULL T13
 if T13 NULL L5
-= 444 NULL gtr
-+ b 1 T14
-= T14 NULL b
+- 23 8 T14
++ 444 T14 T15
+= T15 NULL gtr
++ b 1 T16
+= T16 NULL b
 = 20 NULL y
 Label NULL NULL L5

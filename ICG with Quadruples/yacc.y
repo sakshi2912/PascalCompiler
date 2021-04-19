@@ -16,7 +16,7 @@ int l_while=0;
 int l_for=0;
 
 
-typedef struct node
+typedef struct node   //symbol table 2D arr
 {
 	int line;
     int scope;
@@ -24,7 +24,7 @@ typedef struct node
 	char* value;
 	char* type; 
 } node;
-typedef struct quadruples
+typedef struct quadruples //2D arr
 {
     char *op;
     char *arg1;
@@ -58,10 +58,7 @@ quad q[100];
 	void while1();
 	void while2();
 	void while3();
-	void for1();
-	void for2();
-	void for3();
-	void for4();
+	
     void make_node(int line, char* name, char* value, char* type, int scope)
     {
         symbol_table[table_index].name=(char*)malloc(sizeof(char)*strlen(name));
@@ -418,7 +415,7 @@ void push_sign()
 //printf("\t%s\n",yytext);
 strcpy(st[++top],yytext);
 }
-void codegen_assign()
+void codegen_assign()   // for assignment operations
 {
     /*for(int i=top;i>=0;i--)
     {
@@ -435,7 +432,7 @@ void codegen_assign()
     quadlen++;
     top=-1;
 }
-void codegen_un()
+void codegen_un()  //unary and temps
 {
     //printf("\thi");
     strcpy(temp,"T");
@@ -527,7 +524,7 @@ void codegen()
 
 temp_i++;
 }
-void while1()
+void while1() //Label first because while gets degenerated to if, and it needs to evaluate the label before the body  (multiplechecks)
 {
 
     l_while = lnum;
@@ -545,7 +542,7 @@ void while1()
     quadlen++;
 }
 
-void while2()
+void while2() // condition
 {
  strcpy(temp,"T");
  sprintf(tmp_i, "%d", temp_i);
@@ -576,7 +573,7 @@ void while2()
  temp_i++;
  }
 
-void while3()
+void while3() // inside the label
 {
 
 printf("\tgoto L%d \n",l_while);

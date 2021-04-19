@@ -27,7 +27,7 @@ begin
    x++;
 end
 else if ( x==20 ) then
-   gtr := 444;
+   gtr := 444+23-8;
 
 else begin b++; y:=20; end
 
